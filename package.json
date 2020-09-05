@@ -1,4 +1,15 @@
 {
   "name": "coordiscroll",
-  "version": "0.1.0"
+  "version": "0.1.1",
+  "description": "Adaptable synchronized/coordinated scrolling of DOM elements using Pub/Sub",
+  "license": "MIT",
+  "repository": "jeffchiou/coordiscroll",
+  "main": "coordiscroll.js",
+  "keywords": [
+    "synchronize",
+    "scroll",
+    "coordinate",
+    "publish",
+    "subscribe"
+  ]
 }
