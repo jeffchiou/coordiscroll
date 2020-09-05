@@ -4,7 +4,7 @@
 [![GitHub stars](https://img.shields.io/github/stars/jeffchiou/coordiscroll)](https://github.com/jeffchiou/coordiscroll/stargazers)
 [![GitHub issues](https://img.shields.io/github/issues/jeffchiou/coordiscroll)](https://github.com/jeffchiou/coordiscroll/issues)
 
-Adaptable synchronized scrolling of DOM elements using Pub/Sub. Currently WIP status / in development, not usable yet.
+Adaptable synchronized scrolling of DOM elements using the Publish-Subscribe pattern. Currently WIP status / in development; not usable yet.
 
 ## Planned Features
 
