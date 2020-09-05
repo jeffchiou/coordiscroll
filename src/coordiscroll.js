@@ -104,3 +104,9 @@ class Publisher {
 const linkPubChannel = (pub, channel) => {
   channel.addPub(pub)
 }
+
+export default {
+  Publisher,
+  Subscriber,
+  Channel
+}
