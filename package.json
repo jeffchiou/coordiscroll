@@ -4,12 +4,13 @@
   "description": "Adaptable synchronized/coordinated scrolling of DOM elements using Pub/Sub",
   "license": "MIT",
   "repository": "jeffchiou/coordiscroll",
-  "main": "coordiscroll.js",
+  "main": "src/coordiscroll.js",
   "keywords": [
     "synchronize",
     "scroll",
     "coordinate",
     "publish",
     "subscribe"
-  ]
+  ],
+  "author": "Jeffrey Chiou <jeffchiou@gmail.com> (https://www.jeffchiou.com/)"
 }
