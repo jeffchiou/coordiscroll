@@ -39,14 +39,16 @@
       height: 40vh;
     }
   </style>
-  <script type="module" src="../src/coordiscroll.js"></script>
+  <!-- <script type="module" src="../src/coordiscroll.js"></script> -->
   <script type="module">
-    import { coordiScroll, Account, Channel } from  "../src/coordiscroll.js"
+    import { coordiScroll, defaultFunctions } from  "../src/coordiscroll.js"
 
     window.onload = () => {      
       let topEls = [document.querySelector('#el1'),document.querySelector('#el2')]
       let botEls = [document.querySelector('#annotations'),document.querySelector('#el3')]
-      let [A, chA, B, chB] = coordiScroll(topEls[0], topEls[1])
+      let [accA, chA, accB, chB] = coordiScroll(topEls[0], topEls[1])
+      accA.setScrollFunction(chB, defaultFunctions.get("proportional"))
+      accB.setScrollFunction(chA, defaultFunctions.get("proportional"))
       /*
       let A = new Account(topEls[0])
       let chA = new Channel("Channel A")

@@ -72,30 +72,30 @@ class Account {
     this.yOnSync = yOnSync
     this.pubChannels = new Set()
     this.subChannels = new Set()
-    this.xFunctions = new Map()
-    this.yFunctions = new Map()
+    this.scrollFunctions = new Map()
+
   }
 
-  setXFunction = (ch, func) => this.xFunctions.set(ch, func)
-  setYFunction = (ch, func) => this.yFunctions.set(ch, func)
+  setScrollFunction = (ch, func) => this.scrollFunctions.set(ch, func)
 
   getNotified = (ch, msg) => {
     window.requestAnimationFrame(() => {
       this.stopPublishing()
-      this.el.scrollLeft = this.xFunctions.get(ch)(msg)
-      this.el.scrollTop = this.yFunctions.get(ch)(msg)
+      let [x,y] = this.scrollFunctions.get(ch)(msg, this.el)
+      if (x) {this.el.scrollLeft = x}
+      if (y) {this.el.scrollTop = y}
       window.requestAnimationFrame( () => this.startPublishing() )
     })  
   }
 
   publish = (event) => {
     window.requestAnimationFrame((event) => {
-      let pubX = this.el.scrollLeft - this.xOnSync
-      let pubY = this.el.scrollTop - this.yOnSync
       let msg = {
-        x: pubX,
-        y: pubY,
-        t: event.timeStamp
+        x: this.el.scrollLeft - this.xOnSync,
+        y: this.el.scrollTop - this.yOnSync,
+        t: event.timeStamp,
+        w: this.el.scrollWidth - this.el.clientWidth,
+        h: this.el.scrollHeight - this.el.clientHeight
       }
       this.pubChannels.forEach( ch => ch.broadcast(msg) ) 
     })   
@@ -116,30 +116,39 @@ class Account {
   stopPublishing = () => this.el.removeEventListener('scroll', this.publish, {passive: true})
 }
 
+const defaultFunctions = new Map()
+defaultFunctions.set("default", (msg,el) => [msg.x, msg.y])
+defaultFunctions.set("xOnly", (msg,el) => [msg.x, null])
+defaultFunctions.set("yOnly", (msg,el) => [null, msg.y])
+defaultFunctions.set("proportional", (msg, el) => {
+  let x = (el.scrollWidth-el.clientWidth) * msg.x / msg.w
+  let y = (el.scrollHeight-el.clientHeight) * msg.y / msg.h
+  return [x, y]
+})
+
 const coordiScroll = (el1, el2) => {
-  let elA = new Account(el1)
+  let accA = new Account(el1)
   let chA = new Channel()
 
-  let elB = new Account(el2)
+  let accB = new Account(el2)
   let chB = new Channel()
 
-  elA.setPubChannel(chA)
-  elA.setSubChannel(chB)
-  elB.setSubChannel(chA)
-  elB.setPubChannel(chB)
+  accA.setPubChannel(chA)
+  accA.setSubChannel(chB)
+  accB.setSubChannel(chA)
+  accB.setPubChannel(chB)
 
-  elA.setXFunction(chB, msg => msg.x)
-  elA.setYFunction(chB, msg => msg.y)
-  elB.setXFunction(chA, msg => msg.x)
-  elB.setYFunction(chA, msg => msg.y)
+  accA.setScrollFunction(chB, defaultFunctions.get("default"))
+  accB.setScrollFunction(chA, defaultFunctions.get("default"))
 
-  elA.startPublishing()      
-  elB.startPublishing()
-  return [elA, chA, elB, chB]
+  accA.startPublishing()      
+  accB.startPublishing()
+  return [accA, chA, accB, chB]
 }
 
 export {
   Account,  
   Channel,
-  coordiScroll
+  coordiScroll,
+  defaultFunctions
 }

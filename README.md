@@ -8,31 +8,39 @@ Currently WIP status / in development; not usable yet. Adaptable synchronized sc
 
 ## Usage
 
-Basic synchronization
+Basic synchronization, where `elA` and `elB` are elements/nodes.
 
 ```javascript
-import { coordiScroll, Account, Channel } from "coordiscroll.js"
-let [A, chA, B, chB] = coordiScroll(el1, el2);
+import { coordiScroll } from "coordiscroll.js"
+let [accA, chA, accB, chB] = coordiScroll(elA, elB)
 ```
-
+Add this for proportional scroll
+```javascript
+import { defaultFunctions } from "coordiscroll.js"
+elA.setScrollFunction(chB, defaultFunctions.get("proportional"))
+elB.setScrollFunction(chA, defaultFunctions.get("proportional"))
+```
 Same setup, but without the helper function
 
 ```javascript
 import { coordiScroll, Account, Channel } from "coordiscroll.js"
 
-let A = new Account(el1)
-let chA = new Channel("Channel A")
+let accA = new Account(el1)
+let chA = new Channel()
 
-let B = new Account(el2)
-let chB = new Channel("Channel B")
+let accB = new Account(el2)
+let chB = new Channel()
 
-A.setPubChannel(chA)
-A.setSubChannel(chB)
-B.setSubChannel(chA)
-B.setPubChannel(chB)
+accA.setPubChannel(chA)
+accA.setSubChannel(chB)
+accB.setSubChannel(chA)
+accB.setPubChannel(chB)
 
-A.startPublishing()      
-B.startPublishing()
+accA.setScrollFunction(chB, (msg,el) => [msg.x, msg.y])
+accB.setScrollFunction(chA, (msg,el) => [msg.x, msg.y])
+
+accA.startPublishing()      
+accB.startPublishing()
 ```
 
 ## Planned Features
