@@ -41,14 +41,16 @@
   </style>
   <script type="module" src="../src/coordiscroll.js"></script>
   <script type="module">
-    import { Account, Channel } from  "../src/coordiscroll.js"
+    import { coordiScroll, Account, Channel } from  "../src/coordiscroll.js"
 
     window.onload = () => {      
       let topEls = [document.querySelector('#el1'),document.querySelector('#el2')]
       let botEls = [document.querySelector('#annotations'),document.querySelector('#el3')]
+      let [A, chA, B, chB] = coordiScroll(topEls[0], topEls[1])
+      /*
       let A = new Account(topEls[0])
       let chA = new Channel("Channel A")
-      
+
       let B = new Account(topEls[1])
       let chB = new Channel("Channel B")
 
@@ -60,7 +62,7 @@
 
       A.startPublishing()      
       B.startPublishing()
-      /*
+
       // minimum code using the remove event listener method
       addListener = (el) => {
         el.addEventListener('scroll', scrollListener)

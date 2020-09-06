@@ -77,16 +77,14 @@ class Account {
     this.subChannels = new Map()
     this.responseFunctions = new Map()
   }
+
   getNotified = (id, msg) => {
-    console.log(this.subChannels.get(id))
-    console.log(msg.y)
     window.requestAnimationFrame(() => {
       this.stopPublishing()      
       this.el.scrollLeft = msg.x
       this.el.scrollTop = msg.y  
       window.requestAnimationFrame( () => this.startPublishing() )
     })  
-
   }
 
   publish = (event) => {
@@ -110,26 +108,31 @@ class Account {
     channel.addSub(this)
   }
   
-  startPublishing = () => {
-    this.el.addEventListener('scroll', this.publish, {passive: true})
-    this.el.addEventListener("click", this.onClick, {passive: true})
-  }
-  stopPublishing = () => {
-    this.el.removeEventListener('scroll', this.publish, {passive: true})
-  }
-
-  onClick = (event) => {
-    console.log(event)
-    this.stopPublishing()
-  }
+  startPublishing = () => this.el.addEventListener('scroll', this.publish, {passive: true})
+  stopPublishing = () => this.el.removeEventListener('scroll', this.publish, {passive: true})
 }
 
+const coordiScroll = (el1, el2) => {
+  let elA = new Account(el1)
+  let chA = new Channel("Channel A")
 
+  let elB = new Account(el2)
+  let chB = new Channel("Channel B")
+
+  elA.setPubChannel(chA)
+  elA.setSubChannel(chB)
+  elB.setSubChannel(chA)
+  elB.setPubChannel(chB)
+  elA.startPublishing()      
+  elB.startPublishing()
+  return [A, chA, B, chB]
+}
 const linkPubChannel = (pub, channel) => {
   channel.addPub(pub)
 }
 
 export {
   Account,  
-  Channel
+  Channel,
+  coordiScroll
 }

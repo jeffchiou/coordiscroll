@@ -12,7 +12,7 @@ Basic synchronization
 
 ```javascript
 import { coordiScroll, Account, Channel } from "coordiscroll.js"
-A, chA, B, chB = coordiScroll(el1, el2);
+let [A, chA, B, chB] = coordiScroll(el1, el2);
 ```
 
 Same setup, but without the helper function
