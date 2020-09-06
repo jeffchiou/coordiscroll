@@ -17,8 +17,8 @@ let [accA, chA, accB, chB] = coordiScroll(elA, elB)
 Add this for proportional scroll
 ```javascript
 import { defaultFunctions } from "coordiscroll.js"
-elA.setScrollFunction(chB, defaultFunctions.get("proportional"))
-elB.setScrollFunction(chA, defaultFunctions.get("proportional"))
+accA.setScrollFunction(chB, defaultFunctions.get("proportional"))
+accB.setScrollFunction(chA, defaultFunctions.get("proportional"))
 ```
 Same setup, but without the helper function
 
