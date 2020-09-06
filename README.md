@@ -4,7 +4,36 @@
 [![GitHub stars](https://img.shields.io/github/stars/jeffchiou/coordiscroll)](https://github.com/jeffchiou/coordiscroll/stargazers)
 [![GitHub issues](https://img.shields.io/github/issues/jeffchiou/coordiscroll)](https://github.com/jeffchiou/coordiscroll/issues)
 
-Adaptable synchronized scrolling of DOM elements using the Publish-Subscribe pattern. Vanilla JS. Currently WIP status / in development; not usable yet.
+Currently WIP status / in development; not usable yet. Adaptable synchronized scrolling of DOM elements using the Publish-Subscribe pattern. Vanilla JS.
+
+## Usage
+
+Basic synchronization
+
+```javascript
+import { coordiScroll, Account, Channel } from "coordiscroll.js"
+A, chA, B, chB = coordiScroll(el1, el2);
+```
+
+Same setup, but without the helper function
+
+```javascript
+import { coordiScroll, Account, Channel } from "coordiscroll.js"
+
+let A = new Account(el1)
+let chA = new Channel("Channel A")
+
+let B = new Account(el2)
+let chB = new Channel("Channel B")
+
+A.setPubChannel(chA)
+A.setSubChannel(chB)
+B.setSubChannel(chA)
+B.setPubChannel(chB)
+
+A.startPublishing()      
+B.startPublishing()
+```
 
 ## Planned Features
 
