@@ -22,8 +22,7 @@
 // }
 
 class Channel {
-  constructor(id, bufferSize=10) {
-    this.id = id
+  constructor(bufferSize=10) {
     this.bufferInd = -1 // so first push starts at 0
     this.bufferSize = bufferSize
     this.xStream = new Array(this.bufferSize)
@@ -73,8 +72,8 @@ class Account {
     this.el = element
     this.xOnSync = xOnSync
     this.yOnSync = yOnSync
-    this.pubChannels = new Map()
-    this.subChannels = new Map()
+    this.pubChannels = new Set()
+    this.subChannels = new Set()
     this.responseFunctions = new Map()
   }
 
@@ -100,11 +99,11 @@ class Account {
     })   
   }
   setPubChannel = (channel) => {
-    this.pubChannels.set(channel.id, channel)
+    this.pubChannels.add(channel)
     channel.addPub(this)
   }
   setSubChannel = (channel) => {
-    this.subChannels.set(channel.id, channel)
+    this.subChannels.add(channel)
     channel.addSub(this)
   }
   
@@ -114,10 +113,10 @@ class Account {
 
 const coordiScroll = (el1, el2) => {
   let elA = new Account(el1)
-  let chA = new Channel("Channel A")
+  let chA = new Channel()
 
   let elB = new Account(el2)
-  let chB = new Channel("Channel B")
+  let chB = new Channel()
 
   elA.setPubChannel(chA)
   elA.setSubChannel(chB)
@@ -125,7 +124,7 @@ const coordiScroll = (el1, el2) => {
   elB.setPubChannel(chB)
   elA.startPublishing()      
   elB.startPublishing()
-  return [A, chA, B, chB]
+  return [elA, chA, elB, chB]
 }
 const linkPubChannel = (pub, channel) => {
   channel.addPub(pub)
