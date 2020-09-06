@@ -4,53 +4,37 @@
 [![GitHub stars](https://img.shields.io/github/stars/jeffchiou/coordiscroll)](https://github.com/jeffchiou/coordiscroll/stargazers)
 [![GitHub issues](https://img.shields.io/github/issues/jeffchiou/coordiscroll)](https://github.com/jeffchiou/coordiscroll/issues)
 
-Currently WIP status / in development; not usable yet. Adaptable synchronized scrolling of DOM elements using the Publish-Subscribe pattern. Vanilla JS.
+Currently WIP pre-alpha status: in development and not quite usable yet. Adaptable synchronized scrolling of DOM elements using the Publish-Subscribe pattern. Vanilla JS.
 
-## Usage
+## Quickstart
 
-Basic synchronization, where `elA` and `elB` are elements/nodes.
+Each element can have an account, which can publish to different channels, as well as subscribe to different channels. Each account responds channel broadcasts using a scroll transformation function specific to the channel.
+
+Basic synchronization, where `el` is an array of elements/nodes.
 
 ```javascript
 import { coordiScroll } from "coordiscroll.js"
-let [accA, chA, accB, chB] = coordiScroll(elA, elB)
+let [accs, chs] = coordiScroll(els)
 ```
-Add this for proportional scroll
-```javascript
-import { defaultFunctions } from "coordiscroll.js"
-accA.setScrollFunction(chB, defaultFunctions.get("proportional"))
-accB.setScrollFunction(chA, defaultFunctions.get("proportional"))
-```
-Same setup, but without the helper function
-
-```javascript
-import { coordiScroll, Account, Channel } from "coordiscroll.js"
-
-let accA = new Account(el1)
-let chA = new Channel()
-
-let accB = new Account(el2)
-let chB = new Channel()
-
-accA.setPubChannel(chA)
-accA.setSubChannel(chB)
-accB.setSubChannel(chA)
-accB.setPubChannel(chB)
-
-accA.setScrollFunction(chB, (msg,el) => [msg.x, msg.y])
-accB.setScrollFunction(chA, (msg,el) => [msg.x, msg.y])
-
-accA.startPublishing()      
-accB.startPublishing()
-```
-
-## Planned Features
+## Features
 
 - Absolute position-based scrolling
 - Proportional/percentage-based scrolling
-- De-sync and re-sync elements at different positions
-- Scroll at different rates. Like proportional scrolling but more flexible
 - Coordinate vertical w/ vertical, horizontal w/ horizontal, or even vertical w/ horizontal scrolls.
+- Scroll at different rates.
 - In fact, define any sync relationship using your own transformation function.
+
+## TODO
+
+- Multiple elements ease-of-use changes
+- De-sync and re-sync elements at different positions.
+- Relative scrolling, using message streams and difference from one time to another.
+- Tests, especially multiple elements.
+- Get complex demo working
+
+## Advanced Usage
+
+TBD
 
 ## Motivation
 

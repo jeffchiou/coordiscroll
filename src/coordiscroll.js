@@ -20,7 +20,7 @@
 //   }
 //   let unlinkXs = (caller, objs) => objs.forEach( obj => linkX(caller, obj))
 // }
-
+//TODO: subAllToChannel(els), syncTwoEls(el1,el2), use msgStreams instead of msgs
 class Channel {
   constructor(bufferSize=10) {
     this.bufferInd = -1 // so first push starts at 0
@@ -95,7 +95,7 @@ class Account {
         y: this.el.scrollTop - this.yOnSync,
         t: event.timeStamp,
         w: this.el.scrollWidth - this.el.clientWidth,
-        h: this.el.scrollHeight - this.el.clientHeight
+        h: this.el.scrollHeight - this.el.clientHeight,
       }
       this.pubChannels.forEach( ch => ch.broadcast(msg) ) 
     })   
@@ -126,24 +126,28 @@ defaultFunctions.set("proportional", (msg, el) => {
   return [x, y]
 })
 
-const coordiScroll = (el1, el2) => {
-  let accA = new Account(el1)
-  let chA = new Channel()
+const coordiScroll = (els) => {
+  let accs = new Map()
+  let chs = new Map() 
+  els.forEach(el => {
+    accs.set(el, new Account(el))
+    chs.set(el, new Channel())
+    accs.get(el).setPubChannel(chs.get(el))
+  })
 
-  let accB = new Account(el2)
-  let chB = new Channel()
+  els.forEach(mainEl => {
+    els.forEach(elToSubTo => {
+      if (!mainEl.isSameNode(elToSubTo)) {
+        accs.get(mainEl).setSubChannel(chs.get(elToSubTo))
+        accs.get(mainEl).setScrollFunction(
+          chs.get(elToSubTo), defaultFunctions.get("default")
+        )
+      }
+    })
+  })
 
-  accA.setPubChannel(chA)
-  accA.setSubChannel(chB)
-  accB.setSubChannel(chA)
-  accB.setPubChannel(chB)
-
-  accA.setScrollFunction(chB, defaultFunctions.get("default"))
-  accB.setScrollFunction(chA, defaultFunctions.get("default"))
-
-  accA.startPublishing()      
-  accB.startPublishing()
-  return [accA, chA, accB, chB]
+  accs.forEach(acc => acc.startPublishing())
+  return [accs, chs]
 }
 
 export {
