@@ -62,9 +62,7 @@ class Channel {
     this.yStream[this.bufferInd] = y
     this.tStream[this.bufferInd] = t
   }
-  broadcast = msg => this.subs.forEach(sub => sub.getNotified(this.id, msg))
-
-  removeSub
+  broadcast = msg => this.subs.forEach(sub => sub.getNotified(this, msg))
 }
 
 class Account {
@@ -74,14 +72,18 @@ class Account {
     this.yOnSync = yOnSync
     this.pubChannels = new Set()
     this.subChannels = new Set()
-    this.responseFunctions = new Map()
+    this.xFunctions = new Map()
+    this.yFunctions = new Map()
   }
 
-  getNotified = (id, msg) => {
+  setXFunction = (ch, func) => this.xFunctions.set(ch, func)
+  setYFunction = (ch, func) => this.yFunctions.set(ch, func)
+
+  getNotified = (ch, msg) => {
     window.requestAnimationFrame(() => {
-      this.stopPublishing()      
-      this.el.scrollLeft = msg.x
-      this.el.scrollTop = msg.y  
+      this.stopPublishing()
+      this.el.scrollLeft = this.xFunctions.get(ch)(msg)
+      this.el.scrollTop = this.yFunctions.get(ch)(msg)
       window.requestAnimationFrame( () => this.startPublishing() )
     })  
   }
@@ -98,6 +100,7 @@ class Account {
       this.pubChannels.forEach( ch => ch.broadcast(msg) ) 
     })   
   }
+
   setPubChannel = (channel) => {
     this.pubChannels.add(channel)
     channel.addPub(this)
@@ -106,6 +109,8 @@ class Account {
     this.subChannels.add(channel)
     channel.addSub(this)
   }
+  setPubChannels = chs => chs.map(this.setPubChannel)
+  setSubChannels = chs => chs.map(this.setSubChannel)
   
   startPublishing = () => this.el.addEventListener('scroll', this.publish, {passive: true})
   stopPublishing = () => this.el.removeEventListener('scroll', this.publish, {passive: true})
@@ -122,12 +127,15 @@ const coordiScroll = (el1, el2) => {
   elA.setSubChannel(chB)
   elB.setSubChannel(chA)
   elB.setPubChannel(chB)
+
+  elA.setXFunction(chB, msg => msg.x)
+  elA.setYFunction(chB, msg => msg.y)
+  elB.setXFunction(chA, msg => msg.x)
+  elB.setYFunction(chA, msg => msg.y)
+
   elA.startPublishing()      
   elB.startPublishing()
   return [elA, chA, elB, chB]
-}
-const linkPubChannel = (pub, channel) => {
-  channel.addPub(pub)
 }
 
 export {
