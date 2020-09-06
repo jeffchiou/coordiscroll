@@ -39,38 +39,61 @@
       height: 40vh;
     }
   </style>
-  <script defer type="module" src="../src/coordiscroll.js"></script>
-  <script>
-    window.onload = () => {
+  <script type="module" src="../src/coordiscroll.js"></script>
+  <script type="module">
+    import { Account, Channel } from  "../src/coordiscroll.js"
+
+    window.onload = () => {      
       let topEls = [document.querySelector('#el1'),document.querySelector('#el2')]
       let botEls = [document.querySelector('#annotations'),document.querySelector('#el3')]
-      let group1 = setupSyncGroup(topEls)  
-      let group2 = setupSyncGroup2(botEls)
+      let A = new Account(topEls[0])
+      let chA = new Channel("Channel A")
+      
+      let B = new Account(topEls[1])
+      let chB = new Channel("Channel B")
+
+      A.setPubChannel(chA)
+      A.setSubChannel(chB)
+      B.setSubChannel(chA)
+      B.setPubChannel(chB)
 
 
+      A.startPublishing()      
+      B.startPublishing()
+      /*
+      // minimum code using the remove event listener method
+      addListener = (el) => {
+        el.addEventListener('scroll', scrollListener)
+      }
+      removeListener = (el) => {
+        el.removeEventListener('scroll', scrollListener)
+      }
+      scrollListener = (e) => {
+        console.log(e.target)
+        window.requestAnimationFrame(() => {
+          if (e.target.isSameNode(topEls[0])) {
+            removeListener(topEls[1])
+            topEls[1].scrollTop = e.target.scrollTop
+            addListener(topEls[1])
+          } else {
+            removeListener(topEls[0])
+            topEls[0].scrollTop = e.target.scrollTop
+            addListener(topEls[0])
+          }
+        })
+      }
+
+      addListener(topEls[0])
+      addListener(topEls[1])
+      */
 
 
 
       /*
-       syncGroup = addToSyncGroup(syncGroup, '#annotations')
-      console.log('should be added')    
-      setTimeout(() => {
-        syncGroup = removeAllScrollListeners(syncGroup)
-        console.log('should be removed')
-        console.log(syncGroup)
-      }, 5000);
-
-
       setTimeout(() => {
         syncGroup = setElementScrollPosition(syncGroup,syncGroup.elements[0],x=200,y=300)
         console.log('scrolled?')
       }, 2000);
-
-      setTimeout(() => {
-        syncGroup = removeElementFromGroup(syncGroup.elements[0], syncGroup)
-        console.log('should be removed')
-        console.log(syncGroup)
-      }, 5000);
       
       */
 

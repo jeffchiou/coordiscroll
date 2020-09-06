@@ -1,7 +1,7 @@
 {
   "name": "coordiscroll",
   "version": "0.1.3",
-  "description": "Adaptable synchronized/coordinated scrolling of DOM elements using Pub/Sub. WIP",
+  "description": "Adaptable synchronized/coordinated scrolling of DOM elements using Pub/Sub. Vanilla JS. WIP",
   "license": "MIT",
   "repository": "jeffchiou/coordiscroll",
   "main": "src/coordiscroll.js",
@@ -10,7 +10,9 @@
     "scroll",
     "coordinate",
     "publish",
-    "subscribe"
+    "subscribe",
+    "sync",
+    "syncscroll"
   ],
   "author": "Jeffrey Chiou <jeffchiou@gmail.com> (https://www.jeffchiou.com/)"
 }
