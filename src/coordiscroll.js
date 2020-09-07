@@ -43,8 +43,10 @@ class Account {
     this.subChannels = new Set()
     this.scrollFunctions = new Map()
     this.state = {
-      goal: {x0: null, x1: null, y0: null, y1: null},
-      dxy: {x0: 0, x1: 0, y0: 0, y1: 0},
+      xGoal: null,
+      yGoal: null,
+      dx: 0,
+      dy: 0,
       xOnSync: xOnSync,
       yOnSync: yOnSync,
     }

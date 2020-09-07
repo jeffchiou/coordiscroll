@@ -6,6 +6,17 @@
 
 Currently WIP pre-alpha status: in development and not quite usable yet. Adaptable synchronized scrolling of DOM elements using the Publish-Subscribe pattern. Vanilla JS.
 
+
+
+## Overview
+
+Who is this for?
+
+- You need relative scrolling
+- You need complex relationships between scrolled elements
+
+If you only need basic synchronized scrolling, other libraries may be more performant.
+
 ## Quickstart
 
 Each element can have an account, which can publish to different channels, as well as subscribe to different channels. Each account responds to channel broadcasts using a scroll transformation function specific to the channel.
@@ -16,6 +27,18 @@ Basic synchronization, where `el` is an array of elements/nodes.
 import { coordiScroll } from "coordiscroll.js"
 let [accs, chs] = coordiScroll(els)
 ```
+Currently 5 scroll functions are defined:
+
+`absolute`: elements are synced by their absolute positions
+
+`absXOnly`: sync only x position
+
+`absYOnly`: sync only y position
+
+`proportional`: elements are synced by the proportion/percentage scrolled
+
+`relative`: elements are synced by the relative difference in their positions (ex. for document reading)
+
 ## Features
 
 - Absolute position-based scrolling
@@ -40,7 +63,7 @@ let [accs, chs] = coordiScroll(els)
 
 ## Advanced Usage
 
-TBD
+Several scroll functions are defined already, but if you need to roll your own, the functions take in as arguments the latest message, the account receiving the message, and the channel publishing the message.
 
 ## Motivation
 
@@ -54,3 +77,7 @@ I looked at scroll animation and scroll synchronization projects, and realized t
 - A wider view with a zoomed in view:
   - panning a map, 1 normal sized 1 zoomed in, i.e. a microscope
 - Interactive function to function mapping (math education)
+
+## Acknowledgements
+
+[react-scroll-sync](https://www.npmjs.com/package/react-scroll-sync) for the "remove and re-add event listener" method. It was a lot more performant than I expected. Before I was using a slower, complicated method involving finding "leaders" and setting scroll goals that was difficult to expand to the publish-subscribe pattern. I still use aspects of this in the relative scrolling code, however.
