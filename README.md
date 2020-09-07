@@ -8,7 +8,7 @@ Currently WIP pre-alpha status: in development and not quite usable yet. Adaptab
 
 ## Quickstart
 
-Each element can have an account, which can publish to different channels, as well as subscribe to different channels. Each account responds channel broadcasts using a scroll transformation function specific to the channel.
+Each element can have an account, which can publish to different channels, as well as subscribe to different channels. Each account responds to channel broadcasts using a scroll transformation function specific to the channel.
 
 Basic synchronization, where `el` is an array of elements/nodes.
 
@@ -30,10 +30,13 @@ let [accs, chs] = coordiScroll(els)
 
 - De-sync and re-sync elements at different positions.
 - Tests
-  - React integration
+  - React and other framework integration
   - Performance with multiple elements
-- Get complex demo working
-- Create document reading demo with 3 columns
+- Demos
+  - Get complex demo working
+  - Create document reading demo with 3 columns
+  - Polish Demos
+- Minification
 
 ## Advanced Usage
 

@@ -78,7 +78,6 @@ class Account {
   }
   getFirstMessage = (ch, msg) => {
     this.prevMsg.set(ch,msg)
-    console.log(this.prevMsg.get(ch))
   }
 
   publish = () => {
@@ -115,21 +114,16 @@ const defaultFunctions = new Map([
   ["absolute", (msg, acc, ch) => [msg.x, msg.y]],
   ["absXOnly", (msg, acc, ch) => [msg.x, null]],
   ["absYOnly", (msg, acc, ch) => [null, msg.y]],
-  ["proportional", (msg, acc, ch) => {    
+  ["proportional", (msg, acc, ch) => {  
     let x = (acc.el.scrollWidth - acc.el.clientWidth) * msg.x / msg.w
     let y = (acc.el.scrollHeight - acc.el.clientHeight) * msg.y / msg.h
     return [x, y]
   }],
   ["relative", (msg, acc, ch) => {
-    console.log(acc.prevMsg.get(ch).y)  
-    console.log(msg.y)
-    // Get dx
     acc.state.dx = msg.x - acc.prevMsg.get(ch).x
     acc.state.dy = msg.y - acc.prevMsg.get(ch).y
-    console.log(acc.state.dy)
     acc.state.xGoal = acc.state.xGoal ? acc.state.dx + acc.state.xGoal : acc.state.dx + acc.el.scrollLeft
     acc.state.yGoal = acc.state.yGoal ? acc.state.dy + acc.state.yGoal : acc.state.dy + acc.el.scrollLeft
-    console.log(acc.state.yGoal)
     return [acc.state.xGoal, acc.state.yGoal]
   }]
 ])
@@ -148,7 +142,7 @@ const coordiScroll = (els) => {
       if (!mainEl.isSameNode(elToSubTo)) {
         accs.get(mainEl).setSubChannel(chs.get(elToSubTo))
         accs.get(mainEl).setScrollFunction(
-          chs.get(elToSubTo), defaultFunctions.get("dxdy")
+          chs.get(elToSubTo), defaultFunctions.get("relative")
         )
       }
     })
