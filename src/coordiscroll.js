@@ -37,35 +37,41 @@ class Channel {
   }
 }
 class Account {
-  constructor(el) {
+  constructor(el, xOnSync=0, yOnSync=0) {
     this.el = el
     this.pubChannels = new Set()
     this.subChannels = new Set()
     this.scrollFunctions = new Map()
     // Dynamic elements need to be set with functions. In this case IIFEs
+    this.prevMsg = {}
     this.state = {
-      xGoal: (el=>el.scrollLeft)(el),
-      yGoal: (el=>el.scrollTop)(el),
-      dx: 0,
-      dy: 0,
-      xOnSync: (el=>el.scrollLeft)(el),
-      yOnSync: (el=>el.scrollTop)(el),
+      x: (el=>el.scrollLeft)(el),
+      y: (el=>el.scrollTop)(el),
+      x0: xOnSync,
+      y0: yOnSync,
+      xGoal: null,
+      yGoal: null,
+      w: (el=>el.scrollWidth-el.clientWidth)(el),
+      h: (el=>el.scrollHeight-el.clientHeight)(el),
     }
-    this.prevMsg = new Map()
   }
 
-  createMsg = () => {    
-    let msg = {
-      x: this.el.scrollLeft,
-      y: this.el.scrollTop,
-      state: this.state,
-      t: Date.now(),
-      w: this.el.scrollWidth - this.el.clientWidth,
-      h: this.el.scrollHeight - this.el.clientHeight,
-    }
-    return msg
+  // "Purer" functions
+  updateState = (state, el) => {
+    let newState = {
+      x: el.scrollLeft,
+      y: el.scrollTop,
+      x0: state.x,
+      y0: state.y,
+      xGoal: state.xGoal ? ( state.xGoal == el.scrollLeft ? null : state.xGoal ) : null,
+      yGoal: state.yGoal ? ( state.yGoal == el.scrollTop ? null : state.yGoal ) : null,
+      w: el.scrollWidth-el.clientWidth,
+      h: el.scrollHeight-el.clientHeight,
+    } 
+    return newState
   }
 
+  // Impure
   setScrollFunction = (ch, func) => this.scrollFunctions.set(ch, func)
 
   getMessaged = (ch, msg) => {
@@ -74,22 +80,25 @@ class Account {
       let [x,y] = this.scrollFunctions.get(ch)(msg, this, ch)
       if (x) this.el.scrollLeft = x
       if (y) this.el.scrollTop = y
-      this.prevMsg.set(ch,msg)
-      window.requestAnimationFrame( () => this.startPublishing() )
+      this.prevMsg.msg = msg
+      this.prevMsg.ch = ch      
+      window.requestAnimationFrame( () => {
+        this.state = this.updateState(this.state, this.el)
+        this.startPublishing()
+      })
     })  
   }
   getFirstMessage = (ch, msg) => {
-    this.prevMsg.set(ch,msg)
+    this.prevMsg.msg = msg
+    this.prevMsg.ch = ch
   }
-
   publish = () => {
     window.requestAnimationFrame(() => {
-      let msg = this.createMsg()
+      let msg = { ...this.state }
       this.pubChannels.forEach( ch => ch.broadcast(msg) ) 
+      window.requestAnimationFrame( () => this.state = this.updateState(this.state, this.el))
     })   
   }
-
-
   setPubChannel = (channel) => {
     this.pubChannels.add(channel)
     channel.addPub(this)
@@ -107,8 +116,8 @@ class Account {
   stopPublishing = () => this.el.removeEventListener('scroll', this.publish, {passive: true})
 
   initialPublish = () => {
-    let msg = this.createMsg()
-    this.pubChannels.forEach( ch => ch.initialBroadcast(msg) ) 
+    this.state = this.updateState(this.state, this.el)
+    this.pubChannels.forEach( ch => ch.initialBroadcast({...this.state}) ) 
   }
 }
 
@@ -122,11 +131,19 @@ const defaultFunctions = new Map([
     return [x, y]
   }],
   ["relative", (msg, acc, ch) => {
-    acc.state.dx = msg.x - acc.prevMsg.get(ch).x
-    acc.state.dy = msg.y - acc.prevMsg.get(ch).y
+    let dx = msg.x - msg.x0
+    let dy = msg.y - msg.y0
+    // alternate between NaN and next goal, resulting in loss of sync position
+    acc.state.xGoal = acc.state.xGoal ? NaN + acc.state.xGoal : dx + acc.el.scrollLeft
+    acc.state.yGoal = acc.state.yGoal ? NaN + acc.state.yGoal : dy + acc.el.scrollTop
+    return [acc.state.xGoal, acc.state.yGoal]
+  }],
+  ["relSpringy", (msg, acc, ch) => {
+    let dx = msg.x - msg.x0
+    let dy = msg.y - msg.y0
 
-    acc.state.xGoal = acc.state.xGoal ? acc.state.dx + acc.state.xGoal : acc.state.dx + acc.el.scrollLeft
-    acc.state.yGoal = acc.state.yGoal ? acc.state.dy + acc.state.yGoal : acc.state.dy + acc.el.scrollLeft
+    acc.state.xGoal = acc.state.xGoal ? dx + acc.state.xGoal : dx + acc.el.scrollLeft
+    acc.state.yGoal = acc.state.yGoal ? dy + acc.state.yGoal : dy + acc.el.scrollTop
     return [acc.state.xGoal, acc.state.yGoal]
   }]
 ])

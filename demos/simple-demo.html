@@ -41,14 +41,13 @@
   </style>
   <!-- <script type="module" src="../src/coordiscroll.js"></script> -->
   <script type="module">
-    import { coordiScroll, defaultFunctions } from  "../src/coordiscroll.js"
+    import { Coord, defaultFunctions } from  "../src/coordiscroll.js"
 
     window.onload = () => {      
       let els = [document.querySelector('#el1'),document.querySelector('#el2'), document.querySelector('#annotations'),document.querySelector('#el3')]
-      let [accs, chs] = coordiScroll(els)
+      let [accs, chs] = Coord.fullyConnect(els,"relative")
       let [accA, accB, accC]= [accs.get(els[0]), accs.get(els[1]), accs.get(els[2])]
       let [chA, chB, chC] = [chs.get(els[0]), chs.get(els[1]), chs.get(els[2])]
-
  
 
 

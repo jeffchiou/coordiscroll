@@ -24,10 +24,12 @@ Each element can have an account, which can publish to different channels, as we
 Basic synchronization, where `el` is an array of elements/nodes.
 
 ```javascript
-import { coordiScroll } from "coordiscroll.js"
-let [accs, chs] = coordiScroll(els)
+import { Coord } from "coordiscroll.js"
+let [accs, chs] = Coord.fullyConnect(els)
 ```
 Currently 5 scroll functions are defined:
+
+`proportional` (default): elements are synced by the proportion/percentage scrolled
 
 `absolute`: elements are synced by their absolute positions
 
@@ -35,9 +37,14 @@ Currently 5 scroll functions are defined:
 
 `absYOnly`: sync only y position
 
-`proportional`: elements are synced by the proportion/percentage scrolled
-
 `relative`: elements are synced by the relative difference in their positions (ex. for document reading)
+
+```javascript
+import { Coord } from "coordiscroll.js"
+let [accs, chs] = Coord.fullyConnect(els, "relative")
+```
+
+
 
 ## Features
 
@@ -60,6 +67,7 @@ Currently 5 scroll functions are defined:
   - Create document reading demo with 3 columns
   - Polish Demos
 - Minification
+- Fix bug where high speed scrolling causes relative position loss
 
 ## Advanced Usage
 
