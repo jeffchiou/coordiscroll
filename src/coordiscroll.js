@@ -37,21 +37,21 @@ class Channel {
   }
 }
 class Account {
-  constructor(element, xOnSync=null, yOnSync=null) {
-    this.el = element
+  constructor(el) {
+    this.el = el
     this.pubChannels = new Set()
     this.subChannels = new Set()
     this.scrollFunctions = new Map()
+    // Dynamic elements need to be set with functions. In this case IIFEs
     this.state = {
-      xGoal: null,
-      yGoal: null,
+      xGoal: (el=>el.scrollLeft)(el),
+      yGoal: (el=>el.scrollTop)(el),
       dx: 0,
       dy: 0,
-      xOnSync: xOnSync,
-      yOnSync: yOnSync,
+      xOnSync: (el=>el.scrollLeft)(el),
+      yOnSync: (el=>el.scrollTop)(el),
     }
     this.prevMsg = new Map()
-
   }
 
   createMsg = () => {    
@@ -124,13 +124,15 @@ const defaultFunctions = new Map([
   ["relative", (msg, acc, ch) => {
     acc.state.dx = msg.x - acc.prevMsg.get(ch).x
     acc.state.dy = msg.y - acc.prevMsg.get(ch).y
+
     acc.state.xGoal = acc.state.xGoal ? acc.state.dx + acc.state.xGoal : acc.state.dx + acc.el.scrollLeft
     acc.state.yGoal = acc.state.yGoal ? acc.state.dy + acc.state.yGoal : acc.state.dy + acc.el.scrollLeft
     return [acc.state.xGoal, acc.state.yGoal]
   }]
 ])
 
-const coordiScroll = (els) => {
+const Coord = {}
+Coord.fullyConnect = (els, scrollFunc="proportional") => {
   let accs = new Map()
   let chs = new Map() 
   els.forEach(el => {
@@ -144,7 +146,7 @@ const coordiScroll = (els) => {
       if (!mainEl.isSameNode(elToSubTo)) {
         accs.get(mainEl).setSubChannel(chs.get(elToSubTo))
         accs.get(mainEl).setScrollFunction(
-          chs.get(elToSubTo), defaultFunctions.get("relative")
+          chs.get(elToSubTo), defaultFunctions.get(scrollFunc)
         )
       }
     })
@@ -158,6 +160,6 @@ const coordiScroll = (els) => {
 export {
   Account,  
   Channel,
-  coordiScroll,
+  Coord,
   defaultFunctions
 }

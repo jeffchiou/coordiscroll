@@ -23,8 +23,8 @@
       justify-content: center;
     }
     .column__article {
-      min-width: 40rem;
-      max-width: 60rem;
+      min-width: 30rem;
+      max-width: 45rem;
       height: 98vh;
       overflow: scroll;
     }
@@ -35,6 +35,18 @@
 
   </style>
   <script defer src="setup-reading-demo.js"></script>
+  <script type="module">
+    import { Coord, Account, Channel, defaultFunctions } from "../src/coordiscroll.js"
+    let els = document.querySelectorAll(".column__article")
+    els[0].scrollTop = els[2].clientHeight * 2
+    els[1].scrollTop = els[2].clientHeight
+    console.log(els[1].scrollTop)
+    window.onload = () =>{
+      let [accs, chs] = Coord.fullyConnect(els,"relative")
+    }
+
+    
+  </script>
 
 </head>
 
@@ -61,7 +73,7 @@
         luctus nisl vel pulvinar. In hac habitasse platea dictumst. Praesent tempor iaculis dui finibus dignissim. Cras
         consectetur sem a risus consectetur, eget ornare nulla convallis. Morbi mattis pulvinar mattis. Nullam fermentum
         condimentum ipsum, vulputate placerat tellus vehicula scelerisque.
-
+        <img src='img/test.jpg'>
         Aliquam gravida leo et purus consequat, a accumsan ipsum scelerisque. Pellentesque sit amet egestas sem.
         Maecenas et tortor non diam rhoncus maximus. Nam ultrices nisi ac risus iaculis sagittis. Vestibulum ac mattis
         magna. Duis laoreet aliquam cursus. Phasellus venenatis, nunc ut cursus fermentum, elit lectus iaculis ex, ut
@@ -179,6 +191,7 @@
         Suspendisse pulvinar feugiat lacus, eu convallis felis imperdiet pulvinar. Maecenas iaculis massa ut nulla
         aliquet, at pharetra leo blandit. Maecenas interdum, nisl molestie facilisis tincidunt, ipsum justo tristique
         nisi, eu rutrum sem risus sit amet nunc.
+        <img src='img/test.jpg'>
 
         <hr>
 

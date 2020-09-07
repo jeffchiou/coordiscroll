@@ -12,7 +12,7 @@ Currently WIP pre-alpha status: in development and not quite usable yet. Adaptab
 
 Who is this for?
 
-- You need relative scrolling
+- You need relative scrolling, i.e. synchronized by the difference in position rather than absolute position
 - You need complex relationships between scrolled elements
 
 If you only need basic synchronized scrolling, other libraries may be more performant.
