@@ -1,36 +1,9 @@
-// const addToMap = (map) => (obj) => {
-//   map.set(obj.el, obj) 
-//   console.log(map)
-//   console.log('added')
-// }
+//TODO: subAllToChannel(els), syncTwoEls(el1,el2), use msgBuffers instead of msgs
 
-// const generateMapFuncs = (mapGetter, addFunc, removeFunc) => {
-//   let addX = obj => mapGetter().set(obj.el, obj)
-//   let addXs = objs => objs.map(addX)
-//   let removeX = obj => mapGetter().delete(obj.el, obj)
-//   let removeXs = objs => objs.map(removeX)
-//   let linkX = (caller, obj) => {
-//     addX(obj)
-//     obj.addFunc(caller)
-//   }
-//   let linkXs = (caller, objs) => objs.forEach( obj => linkX(caller, obj)) 
-//   let unlinkX = (caller, obj) => { 
-//     removeX(obj)
-//     obj.removeFunc(caller)
-//   }
-//   let unlinkXs = (caller, objs) => objs.forEach( obj => linkX(caller, obj))
-// }
-//TODO: subAllToChannel(els), syncTwoEls(el1,el2), use msgStreams instead of msgs
 class Channel {
-  constructor(bufferSize=10) {
-    this.bufferInd = -1 // so first push starts at 0
-    this.bufferSize = bufferSize
-    this.xStream = new Array(this.bufferSize)
-    this.yStream = new Array(this.bufferSize)
-    this.tStream = new Array(this.bufferSize)
+  constructor() {
     this.subs = new Map()
     this.pubs = new Map()
-    // this.addSub = this.addSub.bind(this)
   }
   
   getSubs = () => this.subs
@@ -54,52 +27,67 @@ class Channel {
   removePubs = pubs => pubs.map(this.removePub)
 
   unsubscribe = (sub) => {
+  }
 
+  broadcast = msg => {
+    this.subs.forEach(sub => sub.getMessaged(this, msg))
   }
-  queueMsg = (x, y, t) => {
-    this.bufferInd = (this.bufferInd + 1) % this.bufferSize
-    this.xStream[this.bufferInd] = x
-    this.yStream[this.bufferInd] = y
-    this.tStream[this.bufferInd] = t
+  initialBroadcast = msg => {
+    this.subs.forEach(sub => sub.getFirstMessage(this, msg))
   }
-  broadcast = msg => this.subs.forEach(sub => sub.getNotified(this, msg))
 }
-
 class Account {
-  constructor(element, xOnSync=0, yOnSync=0) {
+  constructor(element, xOnSync=null, yOnSync=null) {
     this.el = element
-    this.xOnSync = xOnSync
-    this.yOnSync = yOnSync
     this.pubChannels = new Set()
     this.subChannels = new Set()
     this.scrollFunctions = new Map()
+    this.state = {
+      goal: {x0: null, x1: null, y0: null, y1: null},
+      dxy: {x0: 0, x1: 0, y0: 0, y1: 0},
+      xOnSync: xOnSync,
+      yOnSync: yOnSync,
+    }
+    this.prevMsg = new Map()
 
+  }
+
+  createMsg = () => {    
+    let msg = {
+      x: this.el.scrollLeft,
+      y: this.el.scrollTop,
+      state: this.state,
+      t: Date.now(),
+      w: this.el.scrollWidth - this.el.clientWidth,
+      h: this.el.scrollHeight - this.el.clientHeight,
+    }
+    return msg
   }
 
   setScrollFunction = (ch, func) => this.scrollFunctions.set(ch, func)
 
-  getNotified = (ch, msg) => {
+  getMessaged = (ch, msg) => {
     window.requestAnimationFrame(() => {
       this.stopPublishing()
-      let [x,y] = this.scrollFunctions.get(ch)(msg, this.el)
-      if (x) {this.el.scrollLeft = x}
-      if (y) {this.el.scrollTop = y}
+      let [x,y] = this.scrollFunctions.get(ch)(msg, this, ch)
+      if (x) this.el.scrollLeft = x
+      if (y) this.el.scrollTop = y
+      this.prevMsg.set(ch,msg)
       window.requestAnimationFrame( () => this.startPublishing() )
     })  
   }
+  getFirstMessage = (ch, msg) => {
+    this.prevMsg.set(ch,msg)
+    console.log(this.prevMsg.get(ch))
+  }
 
-  publish = (event) => {
-    window.requestAnimationFrame((event) => {
-      let msg = {
-        x: this.el.scrollLeft - this.xOnSync,
-        y: this.el.scrollTop - this.yOnSync,
-        t: event.timeStamp,
-        w: this.el.scrollWidth - this.el.clientWidth,
-        h: this.el.scrollHeight - this.el.clientHeight,
-      }
+  publish = () => {
+    window.requestAnimationFrame(() => {
+      let msg = this.createMsg()
       this.pubChannels.forEach( ch => ch.broadcast(msg) ) 
     })   
   }
+
 
   setPubChannel = (channel) => {
     this.pubChannels.add(channel)
@@ -112,19 +100,39 @@ class Account {
   setPubChannels = chs => chs.map(this.setPubChannel)
   setSubChannels = chs => chs.map(this.setSubChannel)
   
-  startPublishing = () => this.el.addEventListener('scroll', this.publish, {passive: true})
+  startPublishing = () => {
+    this.el.addEventListener('scroll', this.publish, {passive: true})
+  }
   stopPublishing = () => this.el.removeEventListener('scroll', this.publish, {passive: true})
+
+  initialPublish = () => {
+    let msg = this.createMsg()
+    this.pubChannels.forEach( ch => ch.initialBroadcast(msg) ) 
+  }
 }
 
-const defaultFunctions = new Map()
-defaultFunctions.set("default", (msg,el) => [msg.x, msg.y])
-defaultFunctions.set("xOnly", (msg,el) => [msg.x, null])
-defaultFunctions.set("yOnly", (msg,el) => [null, msg.y])
-defaultFunctions.set("proportional", (msg, el) => {
-  let x = (el.scrollWidth-el.clientWidth) * msg.x / msg.w
-  let y = (el.scrollHeight-el.clientHeight) * msg.y / msg.h
-  return [x, y]
-})
+const defaultFunctions = new Map([
+  ["absolute", (msg, acc, ch) => [msg.x, msg.y]],
+  ["absXOnly", (msg, acc, ch) => [msg.x, null]],
+  ["absYOnly", (msg, acc, ch) => [null, msg.y]],
+  ["proportional", (msg, acc, ch) => {    
+    let x = (acc.el.scrollWidth - acc.el.clientWidth) * msg.x / msg.w
+    let y = (acc.el.scrollHeight - acc.el.clientHeight) * msg.y / msg.h
+    return [x, y]
+  }],
+  ["relative", (msg, acc, ch) => {
+    console.log(acc.prevMsg.get(ch).y)  
+    console.log(msg.y)
+    // Get dx
+    acc.state.dx = msg.x - acc.prevMsg.get(ch).x
+    acc.state.dy = msg.y - acc.prevMsg.get(ch).y
+    console.log(acc.state.dy)
+    acc.state.xGoal = acc.state.xGoal ? acc.state.dx + acc.state.xGoal : acc.state.dx + acc.el.scrollLeft
+    acc.state.yGoal = acc.state.yGoal ? acc.state.dy + acc.state.yGoal : acc.state.dy + acc.el.scrollLeft
+    console.log(acc.state.yGoal)
+    return [acc.state.xGoal, acc.state.yGoal]
+  }]
+])
 
 const coordiScroll = (els) => {
   let accs = new Map()
@@ -140,12 +148,13 @@ const coordiScroll = (els) => {
       if (!mainEl.isSameNode(elToSubTo)) {
         accs.get(mainEl).setSubChannel(chs.get(elToSubTo))
         accs.get(mainEl).setScrollFunction(
-          chs.get(elToSubTo), defaultFunctions.get("default")
+          chs.get(elToSubTo), defaultFunctions.get("dxdy")
         )
       }
     })
   })
 
+  accs.forEach(acc => acc.initialPublish())
   accs.forEach(acc => acc.startPublishing())
   return [accs, chs]
 }

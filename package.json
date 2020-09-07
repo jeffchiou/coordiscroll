@@ -1,6 +1,6 @@
 {
   "name": "coordiscroll",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "WIP / Not quite functional yet. Adaptable synchronized scrolling of DOM elements using PubSub. Vanilla JS.",
   "license": "MIT",
   "repository": "jeffchiou/coordiscroll",

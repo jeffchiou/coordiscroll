@@ -23,14 +23,17 @@ let [accs, chs] = coordiScroll(els)
 - Coordinate vertical w/ vertical, horizontal w/ horizontal, or even vertical w/ horizontal scrolls.
 - Scroll at different rates.
 - In fact, define any sync relationship using your own transformation function.
+- Relative scrolling, using difference from one time to another.
+- Multiple elements convenience functions
 
 ## TODO
 
-- Multiple elements ease-of-use changes
 - De-sync and re-sync elements at different positions.
-- Relative scrolling, using message streams and difference from one time to another.
-- Tests, especially multiple elements.
+- Tests
+  - React integration
+  - Performance with multiple elements
 - Get complex demo working
+- Create document reading demo with 3 columns
 
 ## Advanced Usage
 
