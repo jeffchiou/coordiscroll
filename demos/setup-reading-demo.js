@@ -16,6 +16,7 @@ function updateGlobalVariables() {
 function addColumn() {
   let clone = mainColumn.cloneNode(true);
   ui.append(clone);
+  clone.id = "colnum" + columns.length
   clone.getElementsByClassName("column__header")[0].innerHTML = columns.length;
   updateGlobalVariables();
 }

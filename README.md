@@ -37,11 +37,13 @@ Currently 5 scroll functions are defined:
 
 `absYOnly`: sync only y position
 
-`relative`: elements are synced by the relative difference in their positions (ex. for document reading)
+`relSoft`: elements are synced by the relative difference in their positions (ex. for document reading). Elements lose relative difference upon scrolling to the end
+
+`relLoop`: elements are synced by the relative difference, but loop back to the top instead of losing the difference once reaching the end.
 
 ```javascript
 import { Coord } from "coordiscroll.js"
-let [accs, chs] = Coord.fullyConnect(els, "relative")
+let [accs, chs] = Coord.fullyConnect(els, "relLoop")
 ```
 
 
@@ -53,7 +55,7 @@ let [accs, chs] = Coord.fullyConnect(els, "relative")
 - Coordinate vertical w/ vertical, horizontal w/ horizontal, or even vertical w/ horizontal scrolls.
 - Scroll at different rates.
 - In fact, define any sync relationship using your own transformation function.
-- Relative scrolling, using difference from one time to another.
+- Relative scrolling, using difference from one time to another. 
 - Multiple elements convenience functions
 
 ## TODO
@@ -62,6 +64,7 @@ let [accs, chs] = Coord.fullyConnect(els, "relative")
 - Tests
   - React and other framework integration
   - Performance with multiple elements
+  - Multiple element add remove
 - Demos
   - Get complex demo working
   - Create document reading demo with 3 columns

@@ -1,19 +1,24 @@
 {
   "name": "coordiscroll",
-  "version": "0.1.11",
+  "version": "0.1.12",
   "description": "WIP / Not quite functional yet. Adaptable synchronized scrolling of DOM elements using PubSub. Vanilla JS.",
   "license": "MIT",
-  "repository": "jeffchiou/coordiscroll",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jeffchiou/coordiscroll"
+  },
   "main": "src/coordiscroll.js",
   "keywords": [
-    "synchronize",
-    "scroll",
     "coordinate",
     "publish",
+    "relative",
+    "scroll",
     "subscribe",
     "sync",
-    "syncscroll"
+    "synchronize",
+    "syncscroll",
+    "vanilla",
+    "vanillajs"
   ],
-  "author": "Jeffrey Chiou <jeffchiou@gmail.com> (https://www.jeffchiou.com/)",
-  "publishConfig": { "registry": "https://npm.pkg.github.com/" }
+  "author": "Jeffrey Chiou <jeffchiou@gmail.com> (https://www.jeffchiou.com/)"
 }

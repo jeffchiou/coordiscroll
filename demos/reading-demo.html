@@ -10,8 +10,8 @@
       font-size: 62.5%;
     }
     body {
-      font-size: 1.8rem;
-      line-height: 2.5rem;
+      font-size: 1.6rem;
+      line-height: 2rem;
       font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
     .main-ui {
@@ -32,17 +32,24 @@
       display: flex;
       flex-direction: column;
     }
+    #colnum2 article{
+      height: 90vh;
+    }
+    #colnum3 article{
+      height: 95vh;
+    }
+
 
   </style>
   <script defer src="setup-reading-demo.js"></script>
   <script type="module">
-    import { Coord, Account, Channel, defaultFunctions } from "../src/coordiscroll.js"
+    import { Coord, Account, Channel, ScrollFuncs } from "../src/coordiscroll.js"
     let els = document.querySelectorAll(".column__article")
     els[0].scrollTop = els[2].clientHeight * 2
     els[1].scrollTop = els[2].clientHeight
     console.log(els[1].scrollTop)
     window.onload = () =>{
-      let [accs, chs] = Coord.fullyConnect(els,"relative")
+      let [accs, chs] = Coord.fullyConnect(els,"relSpringy")
     }
 
     

@@ -67,12 +67,11 @@ class Account {
       y: el.scrollTop,
       x0: state.x,
       y0: state.y,
-      xOnSync: state.xOnSync,
-      yOnSync: state.yOnSync,
       xGoal: state.xGoal ? ( state.xGoal == el.scrollLeft ? null : state.xGoal ) : null,
       yGoal: state.yGoal ? ( state.yGoal == el.scrollTop ? null : state.yGoal ) : null,
       w: el.scrollWidth-el.clientWidth,
       h: el.scrollHeight-el.clientHeight,
+      ...state
     } 
     return newState
   }
@@ -136,7 +135,7 @@ ScrollFuncs.proportional = (msg, acc, ch) => {
   let y = (acc.el.scrollHeight - acc.el.clientHeight) * msg.y / msg.h
   return [x, y]
 }
-ScrollFuncs.relSoft = (msg, acc, ch) => {
+ScrollFuncs.relative = (msg, acc, ch) => {
   let dx = msg.x - msg.x0
   let dy = msg.y - msg.y0
 
@@ -148,41 +147,20 @@ ScrollFuncs.relSoft = (msg, acc, ch) => {
   acc.state.yGoal = acc.state.yGoal ? dy + acc.state.yGoal : dy + acc.el.scrollTop
   return [acc.state.xGoal, acc.state.yGoal]
 }
-ScrollFuncs.relLoop =  (msg, acc, ch) => {
-  let dx = msg.x - msg.x0
-  let dy = msg.y - msg.y0
-
-  acc.state.xGoal = acc.state.xGoal ? dx + acc.state.xGoal : dx + acc.el.scrollLeft
-  acc.state.yGoal = acc.state.yGoal ? dy + acc.state.yGoal : dy + acc.el.scrollTop
-
-  if (acc.state.yGoal > acc.state.h) {
-    acc.state.yGoal = acc.state.yGoal - acc.state.h + dy
-  } else if (acc.state.yGoal < 0) {
-    acc.state.yGoal = acc.state.yGoal + acc.state.h + dy
-  }
-  return [acc.state.xGoal, acc.state.yGoal]
-}
-
-ScrollFuncs.relSpring =  (msg, acc, ch) => {
+ScrollFuncs.relSpringy =  (msg, acc, ch) => {
   let dx = msg.x - msg.x0
   let dy = msg.y - msg.y0
 
   // if acc.state ch difference
-  let ySyncDiff = acc.state.yOnSync - msg.yOnSync
-  // if (ySyncDiff < 0 && (acc.state.yGoal > acc.state.h)) {
+  // let ySyncDiff = acc.state.yOnSync - msg.state.yOnSync
+  // console.log(msg)
+  // if (ySyncDiff < 0 && (acc.state.yGoal > acc.state.h || acc.state.yGoal < 0)) {
   //   acc.state.yGoal = dy + acc.el.scrollTop + ySyncDiff
   // }
-  // if (ySyncDiff > 0 && (acc.state.yGoal < 0)) {
-  //   acc.state.yGoal = dy + acc.el.scrollTop + ySyncDiff
-  // }
-  // if (ySyncDiff < 0 && acc.state.yGoal == null) {
-  // if (ySyncDiff < 0 && acc.state.yGoal == null) {
-  //   if (msg.y >= msg.h) acc.state.yGoal = dy + acc.el.scrollTop + ySyncDiff
-  // }
+  console.log(msg)
 
   acc.state.xGoal = acc.state.xGoal ? dx + acc.state.xGoal : dx + acc.el.scrollLeft
   acc.state.yGoal = acc.state.yGoal ? dy + acc.state.yGoal : dy + acc.el.scrollTop
-
   return [acc.state.xGoal, acc.state.yGoal]
 }
 
