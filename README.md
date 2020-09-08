@@ -67,7 +67,8 @@ let [accs, chs] = Coord.fullyConnect(els, "relative")
   - Create document reading demo with 3 columns
   - Polish Demos
 - Minification
-- Fix bug where high speed scrolling causes relative position loss
+- Fix bug for relSpringy: scrolling different elements causes relative position loss
+  - Need to look at the goals being set within certain boundaries, taking into account width and height.
 
 ## Advanced Usage
 

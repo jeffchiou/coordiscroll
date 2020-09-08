@@ -14,5 +14,6 @@
     "sync",
     "syncscroll"
   ],
-  "author": "Jeffrey Chiou <jeffchiou@gmail.com> (https://www.jeffchiou.com/)"
+  "author": "Jeffrey Chiou <jeffchiou@gmail.com> (https://www.jeffchiou.com/)",
+  "publishConfig": { "registry": "https://npm.pkg.github.com/" }
 }
