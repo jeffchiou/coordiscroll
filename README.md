@@ -7,7 +7,6 @@
 Currently WIP pre-alpha status: in development and not quite usable yet. Adaptable synchronized scrolling of DOM elements using the Publish-Subscribe pattern. Vanilla JS.
 
 
-
 ## Overview
 
 Who is this for?
@@ -27,6 +26,7 @@ Basic synchronization, where `el` is an array of elements/nodes.
 import { Coord } from "coordiscroll.js"
 let [accs, chs] = Coord.fullyConnect(els)
 ```
+
 Currently 5 scroll functions are defined:
 
 `proportional` (default): elements are synced by the proportion/percentage scrolled
@@ -46,32 +46,35 @@ import { Coord } from "coordiscroll.js"
 let [accs, chs] = Coord.fullyConnect(els, "relLoop")
 ```
 
-
-
 ## Features
 
-- Absolute position-based scrolling
-- Proportional/percentage-based scrolling
-- Coordinate vertical w/ vertical, horizontal w/ horizontal, or even vertical w/ horizontal scrolls.
-- Scroll at different rates.
-- In fact, define any sync relationship using your own transformation function.
-- Relative scrolling, using difference from one time to another.
-- Multiple elements convenience functions
+- Define any sync relationship using your own transformation function. Ex:
+  - Absolute position-based scroll sync
+  - Proportional/percentage-based scroll sync
+  - Coordinate vertical w/ vertical, horizontal w/ horizontal, vertical w/ horizontal scrolls.
+  - Scroll at different rates.
+  - Relative scrolling, using difference from one time to another.
+- Quick easy way to coordinate multiple elements.
+- PubSub enables flexible relationships.
+  - Example: document reading w/ annotations ( D1 <-> D2 -> A )
+    - You have two offset-synced document columns and one annotation column.
+    - You only want the annotation column to follow one of the panes.
+    - In addition, you want the user to be able to scroll annotations without scrolling the two document columns, yet re-sync when a document column is scrolled.
+    - This is all possible with CoordiScroll!
 
 ## TODO
 
-- De-sync and re-sync elements at different positions.
 - Improve and simplify API
+  - De-sync and re-sync elements at different positions.
+  - Simplify the linking of multiple elements
 - Tests
   - React and other framework integration
   - Performance with multiple elements
   - Multiple element add remove
 - Demos
-  - Get complex demo working
-  - Create document reading demo with 3 columns
-  - Polish Demos
+  - Rewrite demos into a github page
+  - Polish demos
 - Minification
-- Revamp relSpring: virtual overscrolling, saving relative positions. Currently scrolling different elements causes relative position loss
 
 ## Advanced Usage
 
