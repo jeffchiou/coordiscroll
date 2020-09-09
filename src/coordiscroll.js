@@ -83,7 +83,7 @@ class Account {
   getMessaged = (ch, msg) => {
     window.requestAnimationFrame(() => {
       this.stopPublishing()
-      let [x,y] = this.scrollFunctions.get(ch)(msg, this, ch)
+      let [x,y] = this.scrollFunctions.get(ch)(msg, this)
       if (x) this.el.scrollLeft = x
       if (y) this.el.scrollTop = y
       this.prevMsg.msg = msg
@@ -128,15 +128,15 @@ class Account {
 }
 
 const ScrollFuncs = {}
-ScrollFuncs.absolute = (msg, acc, ch) => [msg.x, msg.y]
-ScrollFuncs.absXOnly = (msg, acc, ch) => [msg.x, null]
-ScrollFuncs.absYOnly = (msg, acc, ch) => [null, msg.y]
-ScrollFuncs.proportional = (msg, acc, ch) => {  
-  let x = (acc.el.scrollWidth - acc.el.clientWidth) * msg.x / msg.w
-  let y = (acc.el.scrollHeight - acc.el.clientHeight) * msg.y / msg.h
+ScrollFuncs.absolute = (msg, acc) => [msg.x, msg.y]
+ScrollFuncs.absXOnly = (msg, acc) => [msg.x, null]
+ScrollFuncs.absYOnly = (msg, acc) => [null, msg.y]
+ScrollFuncs.proportional = (msg, acc) => {  
+  let x = acc.state.w * msg.x / msg.w
+  let y = acc.state.h * msg.y / msg.h
   return [x, y]
 }
-ScrollFuncs.relSoft = (msg, acc, ch) => {
+ScrollFuncs.relSoft = (msg, acc) => {
   let dx = msg.x - msg.x0
   let dy = msg.y - msg.y0
 
@@ -148,7 +148,7 @@ ScrollFuncs.relSoft = (msg, acc, ch) => {
   acc.state.yGoal = acc.state.yGoal ? dy + acc.state.yGoal : dy + acc.el.scrollTop
   return [acc.state.xGoal, acc.state.yGoal]
 }
-ScrollFuncs.relLoop =  (msg, acc, ch) => {
+ScrollFuncs.relLoop =  (msg, acc) => {
   let dx = msg.x - msg.x0
   let dy = msg.y - msg.y0
 
@@ -160,29 +160,6 @@ ScrollFuncs.relLoop =  (msg, acc, ch) => {
   } else if (acc.state.yGoal < 0) {
     acc.state.yGoal = acc.state.yGoal + acc.state.h + dy
   }
-  return [acc.state.xGoal, acc.state.yGoal]
-}
-
-ScrollFuncs.relSpring =  (msg, acc, ch) => {
-  let dx = msg.x - msg.x0
-  let dy = msg.y - msg.y0
-
-  // if acc.state ch difference
-  let ySyncDiff = acc.state.yOnSync - msg.yOnSync
-  // if (ySyncDiff < 0 && (acc.state.yGoal > acc.state.h)) {
-  //   acc.state.yGoal = dy + acc.el.scrollTop + ySyncDiff
-  // }
-  // if (ySyncDiff > 0 && (acc.state.yGoal < 0)) {
-  //   acc.state.yGoal = dy + acc.el.scrollTop + ySyncDiff
-  // }
-  // if (ySyncDiff < 0 && acc.state.yGoal == null) {
-  // if (ySyncDiff < 0 && acc.state.yGoal == null) {
-  //   if (msg.y >= msg.h) acc.state.yGoal = dy + acc.el.scrollTop + ySyncDiff
-  // }
-
-  acc.state.xGoal = acc.state.xGoal ? dx + acc.state.xGoal : dx + acc.el.scrollLeft
-  acc.state.yGoal = acc.state.yGoal ? dy + acc.state.yGoal : dy + acc.el.scrollTop
-
   return [acc.state.xGoal, acc.state.yGoal]
 }
 

@@ -13,7 +13,7 @@ Currently WIP pre-alpha status: in development and not quite usable yet. Adaptab
 Who is this for?
 
 - You need relative scrolling, i.e. synchronized by the difference in position rather than absolute position
-- You need complex relationships between scrolled elements
+- You need complex sync relationships between scrolled elements
 
 If you only need basic synchronized scrolling, other libraries may be more performant.
 
@@ -55,12 +55,13 @@ let [accs, chs] = Coord.fullyConnect(els, "relLoop")
 - Coordinate vertical w/ vertical, horizontal w/ horizontal, or even vertical w/ horizontal scrolls.
 - Scroll at different rates.
 - In fact, define any sync relationship using your own transformation function.
-- Relative scrolling, using difference from one time to another. 
+- Relative scrolling, using difference from one time to another.
 - Multiple elements convenience functions
 
 ## TODO
 
 - De-sync and re-sync elements at different positions.
+- Improve and simplify API
 - Tests
   - React and other framework integration
   - Performance with multiple elements
@@ -70,12 +71,13 @@ let [accs, chs] = Coord.fullyConnect(els, "relLoop")
   - Create document reading demo with 3 columns
   - Polish Demos
 - Minification
-- Fix bug for relSpringy: scrolling different elements causes relative position loss
-  - Need to look at the goals being set within certain boundaries, taking into account width and height.
+- Revamp relSpring: virtual overscrolling, saving relative positions. Currently scrolling different elements causes relative position loss
 
 ## Advanced Usage
 
 Several scroll functions are defined already, but if you need to roll your own, the functions take in as arguments the latest message, the account receiving the message, and the channel publishing the message.
+
+Coord.fullyConnect returns 1 channel per element using the elements as keys, but it doesn't have to be that way. You can have several channels per element, or one channel for several elements. 
 
 ## Motivation
 
@@ -92,4 +94,6 @@ I looked at scroll animation and scroll synchronization projects, and realized t
 
 ## Acknowledgements
 
-[react-scroll-sync](https://www.npmjs.com/package/react-scroll-sync) for the "remove and re-add event listener" method. It was a lot more performant than I expected. Before I was using a slower, complicated method involving finding "leaders" and setting scroll goals that was difficult to expand to the publish-subscribe pattern. I still use aspects of this in the relative scrolling code, however.
+[react-scroll-sync](https://www.npmjs.com/package/react-scroll-sync) for the "remove and re-add event listener" method. It was a lot more performant than I expected. 
+
+Earlier, I was using a slow complicated method involving finding "leaders" and setting scroll goals that was difficult to expand to the publish-subscribe pattern. I still use aspects of this in the relative scrolling code, however.

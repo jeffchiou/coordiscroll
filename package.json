@@ -1,6 +1,6 @@
 {
   "name": "coordiscroll",
-  "version": "0.1.12",
+  "version": "0.1.13",
   "description": "WIP / Not quite functional yet. Adaptable synchronized scrolling of DOM elements using PubSub. Vanilla JS.",
   "license": "MIT",
   "repository": {
@@ -12,8 +12,10 @@
     "coordinate",
     "publish",
     "relative",
+    "scroll sync",
     "scroll",
     "subscribe",
+    "sync scroll",
     "sync",
     "synchronize",
     "syncscroll",

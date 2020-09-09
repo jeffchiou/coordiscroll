@@ -23,8 +23,8 @@
       justify-content: center;
     }
     .column__article {
-      min-width: 30rem;
-      max-width: 45rem;
+      min-width: 25rem;
+      max-width: 40rem;
       height: 98vh;
       overflow: scroll;
     }
@@ -45,11 +45,11 @@
   <script type="module">
     import { Coord, Account, Channel, ScrollFuncs } from "../src/coordiscroll.js"
     let els = document.querySelectorAll(".column__article")
-    els[0].scrollTop = els[2].clientHeight * 2
-    els[1].scrollTop = els[2].clientHeight
+    els[1].scrollTop = els[0].clientHeight
+    els[2].scrollTop = els[1].clientHeight + els[0].clientHeight
     console.log(els[1].scrollTop)
     window.onload = () =>{
-      let [accs, chs] = Coord.fullyConnect(els,"relSpringy")
+      let [accs, chs] = Coord.fullyConnect(els,"relLoop")
     }
 
     
