@@ -75,7 +75,7 @@
       </div>
       <h3>Relative Springy: <code>relSpring</code></h3>
       <p>Relative springy scrolls the elements, keeping their intial offsets synced. 
-        When an element reaches an end, it stays at the end.</p>
+        When an element reaches an end, it stays at the end, but if a channel the element is listening to moves, it "springs" back to its synced position.</p>
       <div class="demo-spring demo-box">
       </div>
     </section>
@@ -96,7 +96,6 @@
       <p>A scroll function returns x and a y position where the element will scroll to.
         Scroll functions activate when the channel the element's account is subscribed to broadcasts a message.
         You can think of it as $x_{el}, y_{el} := f(x_{msg}, y_{msg})$</p>
-      <p>test = $a*x$</p>
   </main>
   <footer>
 
