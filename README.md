@@ -1,4 +1,4 @@
-# ![CoordiScroll Icon](docs/img/coordiscroll-icon_32.png)CoordiScroll
+# ![CoordiScroll Icon](docs/img/coordiscroll-icon_32.png) CoordiScroll
 
 [![npm](https://img.shields.io/npm/v/coordiscroll)](https://www.npmjs.com/package/coordiscroll)
 [![GitHub license](https://img.shields.io/github/license/jeffchiou/coordiscroll)](https://github.com/jeffchiou/coordiscroll/blob/master/LICENSE)
