@@ -4,7 +4,7 @@
 [![GitHub stars](https://img.shields.io/github/stars/jeffchiou/coordiscroll)](https://github.com/jeffchiou/coordiscroll/stargazers)
 [![GitHub issues](https://img.shields.io/github/issues/jeffchiou/coordiscroll)](https://github.com/jeffchiou/coordiscroll/issues)
 
-Currently WIP pre-alpha status: in development and not quite usable yet. Adaptable synchronized scrolling of DOM elements using the Publish-Subscribe pattern. Vanilla JS.
+Currently WIP alpha status: in development and semi-functional. Adaptable synchronized scrolling of DOM elements using the Publish-Subscribe pattern. Vanilla JS.
 
 
 ## Overview
@@ -20,30 +20,27 @@ If you only need basic synchronized scrolling, other libraries may be more perfo
 
 Each element can have an account, which can publish to different channels, as well as subscribe to different channels. Each account responds to channel broadcasts using a scroll transformation function specific to the channel.
 
-Basic synchronization, where `el` is an array of elements/nodes.
+### Basic Synchronization
 
 ```javascript
 import { Coord } from "coordiscroll.js"
-let [accs, chs] = Coord.fullyConnect(els)
+let [accs, chs] = Coord.fullyConnect(".my_element_class")
 ```
 
-Currently 5 scroll functions are defined:
+Included scroll functions are defined in `scrollfuncs.js`.  Here is a sampling:
 
 `proportional` (default): elements are synced by the proportion/percentage scrolled
 
 `absolute`: elements are synced by their absolute positions
 
-`absXOnly`: sync only x position
-
 `absYOnly`: sync only y position
 
-`relSoft`: elements are synced by the relative difference in their positions (ex. for document reading). Elements lose relative difference upon scrolling to the end
+`relSpring`: elements are synced by relative offset starting positions.
 
-`relLoop`: elements are synced by the relative difference, but loop back to the top instead of losing the difference once reaching the end.
+`relLoop`: elements are synced by the relative difference, but loop back to the top.
 
 ```javascript
-import { Coord } from "coordiscroll.js"
-let [accs, chs] = Coord.fullyConnect(els, "relLoop")
+let [accs, chs] = Coord.fullyConnect(".grid_els", "relLoop")
 ```
 
 ## Features
@@ -66,7 +63,6 @@ let [accs, chs] = Coord.fullyConnect(els, "relLoop")
 
 - Improve and simplify API
   - De-sync and re-sync elements at different positions.
-  - Simplify the linking of multiple elements
 - Tests
   - React and other framework integration
   - Performance with multiple elements
@@ -81,6 +77,22 @@ let [accs, chs] = Coord.fullyConnect(els, "relLoop")
 Several scroll functions are defined already, but if you need to roll your own, the functions take in as arguments the latest message, the account receiving the message, and the channel publishing the message.
 
 Coord.fullyConnect returns 1 channel per element using the elements as keys, but it doesn't have to be that way. You can have several channels per element, or one channel for several elements. 
+
+### Custom Sync Function
+
+Synchronized with a sine wave
+
+```javascript
+let [sinxAcc, sinxCh] = Coord.setupElement('#controller')
+let [sinxControlAcc, sinxControlCh] = Coord.setupElement('#to_be_controlled')
+sinxAcc.setSubAndFunc(sinxControlCh, (msg,acc) => {
+    let y = 20*Math.sin(0.04*msg.x) + acc.state.h/2
+    let x = acc.state.w * msg.x / msg.w
+    return [x,y]
+})
+```
+
+
 
 ## Motivation
 

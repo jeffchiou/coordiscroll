@@ -41,96 +41,34 @@
   <script type="module">
     import { Coord, Account, Channel, ScrollFuncs } from "../src/coordiscroll.js"
     window.onload = () => {
-      let el1 = document.querySelector('#g4_1-1')
-      let el2 = document.querySelector('#g4_1-2')
-      let row1 = document.querySelectorAll(".g4_r1")
-      let [r1Accs, r1Chs] = Coord.fullyConnect(row1,"relLoop")
+      let [r1Accs, r1Chs] = Coord.fullyConnect(".g4_r1","relLoop")
     
-      let row2 = document.querySelectorAll(".g4_r2")
-      let [r2Accs, r2Chs] = Coord.fullyConnect(row2,"proportional")
+      let [r2Accs, r2Chs] = Coord.fullyConnect(".g4_r2","proportional")
 
-      let xControl = document.querySelector('#g4_3-1')
-      let x2Control = document.querySelector('#g4_3-2')
-      let sinxControl = document.querySelector('#g4_3-3')
-      let sqrtxControl = document.querySelector('#g4_3-4') 
-      
-      let x = document.querySelector('#g4_4-1')
-      let x2 = document.querySelector('#g4_4-2')
-      let sinx = document.querySelector('#g4_4-3')
-      let sqrtx = document.querySelector('#g4_4-4')
-
-      let xAcc = new Account(x)
-      let xCh = new Channel()
-      xAcc.setPubChannel(xCh)
-      let xControlAcc = new Account(xControl)
-      let xControlCh = new Channel()
-      xControlAcc.setPubChannel(xControlCh)
-      xAcc.setSubChannel(xControlCh)
-      xAcc.setScrollFunction(xControlCh, (msg,acc) => {
+      let [xAcc, xCh] = Coord.setupElement('#g4_4-1')
+      let [xControlAcc, xControlCh] = Coord.setupElement('#g4_3-1')
+      xAcc.setSubAndFunc(xControlCh, (msg,acc) => {
         let x = acc.state.w * msg.x / msg.w
         let y = acc.state.h - 0.5*msg.x
         return [x, y]
       })
-      xControlAcc.initialPublish()
-      xAcc.initialPublish()
-      xControlAcc.startPublishing()
-      xAcc.startPublishing()
 
-      let x2Acc = new Account(x2)
-      let x2Ch = new Channel()
-      x2Acc.setPubChannel(x2Ch)
-      let x2ControlAcc = new Account(x2Control)
-      let x2ControlCh = new Channel()
-      x2ControlAcc.setPubChannel(x2ControlCh)
-      x2Acc.setSubChannel(x2ControlCh)
-      x2Acc.setScrollFunction(x2ControlCh, (msg,acc) => {
+      let [x2Acc, x2Ch] = Coord.setupElement('#g4_4-2')
+      let [x2ControlAcc, x2ControlCh] = Coord.setupElement('#g4_3-2')
+      x2Acc.setSubAndFunc(x2ControlCh, (msg,acc) => {
         let center = msg.w / 2
         let y = acc.state.h - 0.01*(center-msg.x)**2
         let x = acc.state.w * msg.x / msg.w
         return [x, y]
       })
-      x2ControlAcc.initialPublish()
-      x2Acc.initialPublish()
-      x2ControlAcc.startPublishing()
-      x2Acc.startPublishing()
 
-      let sinxAcc = new Account(sinx)
-      let sinxCh = new Channel()
-      sinxAcc.setPubChannel(sinxCh)
-      let sinxControlAcc = new Account(sinxControl)
-      let sinxControlCh = new Channel()
-      sinxControlAcc.setPubChannel(sinxControlCh)
-      sinxAcc.setSubChannel(sinxControlCh)
-      sinxAcc.setScrollFunction(sinxControlCh, (msg,acc) => {
+      let [sinxAcc, sinxCh] = Coord.setupElement('#g4_4-3')
+      let [sinxControlAcc, sinxControlCh] = Coord.setupElement('#g4_3-3')
+      sinxAcc.setSubAndFunc(sinxControlCh, (msg,acc) => {
         let y = 20*Math.sin(0.04*msg.x) + acc.state.h/2
         let x = acc.state.w * msg.x / msg.w
         return [x,y]
       })
-      sinxControlAcc.initialPublish()
-      sinxAcc.initialPublish()
-      sinxControlAcc.startPublishing()
-      sinxAcc.startPublishing()
-
-      /*
-console.log(testCh.test(testCh.subs)(el2Sub))
-      let topEls = [document.querySelector('#el1'),document.querySelector('#el2')]
-      let botEls = [document.querySelector('#annotations'),document.querySelector('#el3')]
-      let group1 = setupSyncGroup(topEls)  
-      let group2 = setupSyncGroup2(botEls)
-
-      syncGroup = addToSyncGroup(syncGroup, '#annotations')
-      console.log('should be added')    
-
-
-      setTimeout(() => {
-        let g4r2 = document.querySelectorAll('.g4_r2')
-        for (let i=0; i<g4r2.length; i++) {
-          g4r2[i].scrollTop = 300
-        }
-
-      }, 4000);
-      
-      */
 
     }
   </script>
