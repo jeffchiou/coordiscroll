@@ -20,10 +20,10 @@ const valivertElementsOrQuery = valiversions => elementsOrQuery => {
   } 
   throw "Incorrect input type for selecting an element or elements."
 }
-/** Validates and converts an element */
+/** Validates and converts an element. Valivert = validate and convert. */
 const valivertSingle = valivertElementsOrQuery(singleValiversion)
 /**
- * Returns an array of elements. Valivert = validate and convert. 
+ * Returns an array of elements.
  * Converts NodeList to Array so changes to the list itself won't affect the DOM 
  **/
 const valivertMultiple = valivertElementsOrQuery(multipleValiversion)

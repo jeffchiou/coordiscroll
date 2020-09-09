@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>CoordiScroll</title>
+  <meta name="description" content="Adaptable synchronized scrolling using the Publish Subscribe pattern. Vanilla JS.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css"
+    integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js"
+    integrity="sha384-g7c+Jr9ZivxKLnZTDUhnkOnsh30B4H0rpLUpJ4jAIKs4fnJI+sEnkvrMWph2EDg4"
+    crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js"
+    integrity="sha384-mll67QQFJfxn0IYznZYonOWZ644AWYC+Pt2cHqMaRhXVrursRwvLnLaebdGIlYNa"
+    crossorigin="anonymous"></script>
+  <script type="module">
+    import { Coord, Account, Channel, ScrollFuncs } from "../src/coordiscroll.js"
+
+    document.addEventListener("DOMContentLoaded", function () {
+      renderMathInElement(document.body, {
+        delimiters: [
+          { left: "$$", right: "$$", display: true },
+          { left: "\\[", right: "\\]", display: true },
+          { left: "$", right: "$", display: false },
+          { left: "\\(", right: "\\)", display: false }
+        ]
+      })
+    })
+
+
+    window.onload = () =>{
+      let spring = document.querySelectorAll(".demo-spring__col")
+      spring[1].scrollTop = spring[0].clientHeight
+      spring[2].scrollTop = spring[0].clientHeight
+      let [springAccs, springChs] = Coord.fullyConnect(spring,"relSpring")
+
+      let loop = document.querySelectorAll(".demo-loop__col")
+      loop[1].scrollTop = loop[0].clientHeight
+      loop[2].scrollTop = loop[0].clientHeight
+      let [loopAccs, loopChs] = Coord.fullyConnect(loop,"relLoop")
+
+      let prop = document.querySelectorAll(".demo-prop__col")
+      let [propAccs, propChs] = Coord.fullyConnect(prop,"proportional")
+
+      let soft = document.querySelectorAll(".demo-soft__col")
+      soft[1].scrollTop = soft[0].clientHeight
+      soft[2].scrollTop = soft[0].clientHeight
+      let [softAccs, softChs] = Coord.fullyConnect(soft,"relSoft")
+    }
+
+    
+  </script>
+
+
+  <link rel="stylesheet" href="index.css">
+  <script defer src="index.js"></script>
+  <script type="module">
+
+  </script>
+</head>
+
+<body>
+  <header>
+    <img src="img/coordiscroll-icon_128.png">
+    <h1>CoordiScroll Demos</h1>
+  </header>
+  <main>
+    <h2>Default Scroll Functions and Their Usage</h2>
+    <section>
+      <h3>Proportional: <code>proportional</code></h3>
+      <p>Scrolls are coordinated by proportion of the scrollable content.</p>
+      <div class="demo-prop demo-box">
+      </div>
+      <h3>Relative Springy: <code>relSpring</code></h3>
+      <p>Relative springy scrolls the elements, keeping their intial offsets synced. 
+        When an element reaches an end, it stays at the end.</p>
+      <div class="demo-spring demo-box">
+      </div>
+    </section>
+    <section>
+      <h3>Relative Loopy: <code>relLoop, relLoopDxy</code></h3>
+      <p>Relative Loopy also keeps initial offsets synced, but when an element reaches an end, it loops back to the other side.</p>
+      <div class="demo-loop demo-box">
+      </div>
+    </section>
+    <section>
+      <h3>Relative Soft: <code>relSoft</code></h3>
+      <p>Relative soft keeps initial offsets synced until elements reach the end.
+        If the user continues scrolling, the subscriber element will lose its offset.</p>
+      <div class="demo-soft demo-box">      
+      </div>
+    </section>
+    <h2>Creating Scroll Functions</h2>
+      <p>A scroll function returns x and a y position where the element will scroll to.
+        Scroll functions activate when the channel the element's account is subscribed to broadcasts a message.
+        You can think of it as $x_{el}, y_{el} := f(x_{msg}, y_{msg})$</p>
+      <p>test = $a*x$</p>
+  </main>
+  <footer>
+
+  </footer>
+  <div class="lorem hidden">
+    <hr>
+    <h3>Start</h3>
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin scelerisque massa justo, eget mattis leo dapibus
+    quis. In hac habitasse platea dictumst. Morbi sit amet volutpat elit, euismod suscipit felis. Nam eget luctus
+    ligula. Praesent vehicula volutpat dui, ornare elementum neque aliquet in. Ut malesuada ante eu dapibus commodo.
+    Quisque lorem turpis, posuere ut turpis eget, placerat porttitor elit. Quisque ultrices augue at tristique
+    dapibus. Aenean eget turpis vitae nulla accumsan rutrum nec nec lacus. Proin quam leo, aliquam non tristique in,
+    feugiat id tortor. Donec vel euismod turpis. Aliquam eu diam laoreet, imperdiet enim in, facilisis dolor.
+    Phasellus et elit orci. Ut commodo lacinia urna sed interdum. Nam nec aliquet sem. Etiam tempor fringilla justo,
+    in efficitur purus.
+    <img src='img/test.jpg' class="lorem__img">
+    Pellentesque mattis, erat vel venenatis efficitur, sem nibh lacinia turpis, egestas aliquam magna nunc sit amet
+    quam. Sed neque justo, commodo vel suscipit elementum, condimentum quis neque. Vivamus maximus et eros quis
+    pellentesque. Etiam eleifend mauris lacus, sed consequat lectus viverra sit amet. Aliquam viverra viverra
+    cursus. Curabitur lobortis dolor nec felis fermentum, nec scelerisque mi bibendum. Morbi quis est ultricies,
+    pharetra nisi id, suscipit dolor. Sed fringilla condimentum scelerisque. Proin nec ligula enim. Nunc cursus
+    luctus nisl vel pulvinar. In hac habitasse platea dictumst. Praesent tempor iaculis dui finibus dignissim. Cras
+    consectetur sem a risus consectetur, eget ornare nulla convallis. Morbi mattis pulvinar mattis. Nullam fermentum
+    condimentum ipsum, vulputate placerat tellus vehicula scelerisque.
+    
+    Aliquam gravida leo et purus consequat, a accumsan ipsum scelerisque. Pellentesque sit amet egestas sem.
+    Maecenas et tortor non diam rhoncus maximus. Nam ultrices nisi ac risus iaculis sagittis. Vestibulum ac mattis
+    magna. Duis laoreet aliquam cursus. Phasellus venenatis, nunc ut cursus fermentum, elit lectus iaculis ex, ut
+    hendrerit lectus ante in odio. Vivamus sit amet ornare elit. Donec pharetra dolor est, at tempus massa dignissim
+    quis. Phasellus sed ex ac augue convallis placerat maximus vitae risus. Sed rhoncus sapien tellus, sed iaculis
+    ante molestie quis. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
+    Mauris ultricies dignissim risus tincidunt pellentesque.
+
+    Quisque accumsan luctus augue, sed semper nisl convallis lacinia. Fusce efficitur, eros eu pellentesque porta,
+    sapien leo tincidunt dolor, et dignissim augue orci a arcu. Lorem ipsum dolor sit amet, consectetur adipiscing
+    elit. Nunc facilisis vestibulum aliquam. Maecenas consequat odio vitae sem molestie, sed rhoncus sem tincidunt.
+    Quisque blandit sed leo eu blandit. Etiam nulla magna, ullamcorper in laoreet vel, varius vel nulla. Lorem ipsum
+    dolor sit amet, consectetur adipiscing elit. Ut dignissim bibendum
+    <hr>
+    turpis a vehicula. Sed vitae ultricies tellus. Fusce sagittis pharetra aliquet. Cras nec tincidunt tortor, id
+    suscipit neque. Aliquam at orci ut enim tempor ornare in vel neque.
+
+    Vivamus tempus dolor a quam maximus accumsan vitae tristique diam. Nulla commodo purus a accumsan ornare. Nunc
+    rhoncus a nunc vel finibus. Nullam augue erat, convallis sed ultricies eget, condimentum non odio. Nullam lectus
+    libero, blandit at scelerisque a, placerat in quam. Mauris at placerat arcu. In ac odio vitae eros consequat
+    tincidunt. Curabitur viverra ut lacus at scelerisque. Quisque consectetur interdum dolor, nec aliquam purus
+    faucibus a. Integer sit amet odio risus. Proin tincidunt et lectus vitae volutpat. Suspendisse viverra at velit
+    et auctor. Donec tristique leo non erat maximus auctor. Phasellus dictum, eros vitae imperdiet molestie, sapien
+    tellus vestibulum nulla, nec posuere leo ligula in augue.
+
+    Nullam auctor ac est sit amet condimentum. Suspendisse condimentum libero vel mi ornare laoreet. Vestibulum ante
+    ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Suspendisse ac tincidunt lacus. Duis
+    quis purus libero. Integer magna orci, auctor eget aliquet sit amet, feugiat eget ipsum. Suspendisse sed posuere
+    tortor, nec aliquam arcu. Fusce consequat justo sed tincidunt condimentum. Sed in finibus orci, nec maximus
+    augue.
+    <h3>End</h3>
+    <hr>
+  </div>
+  <div class="annotations hidden">
+    <pre>
+
+    </pre>
+    <p>1. Integer magna orci</p>
+    <pre>
+
+
+
+
+
+    </pre>
+    <p>2. Curabitur viverra ut lacus at scelerisque. Quisque consectetur interdum dolor, nec aliquam purus
+    faucibus a.</p>
+    <pre>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </pre>
+    <p>3. Nunc facilisis vestibulum aliquam. Maecenas consequat odio vitae sem molestie, sed rhoncus sem tincidunt.
+    </p>
+    <pre>
+
+
+
+
+
+
+
+
+
+
+    </pre>
+    <p>4. Cras nec tincidunt tortor, id suscipit neque.</p>
+    <pre>
+
+
+
+
+
+
+
+
+
+
+
+      
+
+
+
+
+
+
+
+
+    </pre>
+    <p>5. Sed fringilla condimentum scelerisque. Proin nec ligula enim.</p>    
+  </div>
+</body>
+
+</html>

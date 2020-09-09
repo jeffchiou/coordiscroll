@@ -17,8 +17,8 @@ ScrollFuncs.relLoop =  (msg, acc) => {
   let offsetY = acc.state.yOnSync - msg.yOnSync
   acc.state.xGoal = msg.x + offsetX
   acc.state.yGoal  = msg.y + offsetY
-  if (acc.state.xGoal > acc.state.w)  acc.state.yGoal = acc.state.xGoal - acc.state.w 
-  else if (acc.state.xGoal < 0 )      acc.state.yGoal = acc.state.xGoal + acc.state.w
+  if (acc.state.xGoal > acc.state.w)  acc.state.xGoal = acc.state.xGoal - acc.state.w 
+  else if (acc.state.xGoal < 0 )      acc.state.xGoal = acc.state.xGoal + acc.state.w
   if (acc.state.yGoal > acc.state.h)  acc.state.yGoal = acc.state.yGoal - acc.state.h 
   else if (acc.state.yGoal < 0 )      acc.state.yGoal = acc.state.yGoal + acc.state.h 
   return [acc.state.xGoal, acc.state.yGoal]

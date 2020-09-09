@@ -1,11 +1,11 @@
-# CoordiScroll
+# ![CoordiScroll Icon](docs/img/coordiscroll-icon_32.png)CoordiScroll
+
 [![npm](https://img.shields.io/npm/v/coordiscroll)](https://www.npmjs.com/package/coordiscroll)
 [![GitHub license](https://img.shields.io/github/license/jeffchiou/coordiscroll)](https://github.com/jeffchiou/coordiscroll/blob/master/LICENSE)
 [![GitHub stars](https://img.shields.io/github/stars/jeffchiou/coordiscroll)](https://github.com/jeffchiou/coordiscroll/stargazers)
 [![GitHub issues](https://img.shields.io/github/issues/jeffchiou/coordiscroll)](https://github.com/jeffchiou/coordiscroll/issues)
 
 Currently WIP alpha status: in development and semi-functional. Adaptable synchronized scrolling of DOM elements using the Publish-Subscribe pattern. Vanilla JS.
-
 
 ## Overview
 
