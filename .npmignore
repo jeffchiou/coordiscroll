@@ -1,6 +1,5 @@
-demos/*
-demos/.*
+*.png
+*.jpg
 temp/*
 temp/.*
-index.html
 !demos/img/coordiscroll-icon_32.png
