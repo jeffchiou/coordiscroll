@@ -11,6 +11,13 @@ body {
   color: #333;
   background-color: #fffefb;
 }
+
+a {
+  font-weight: bold;
+  color: #285EAC;
+  text-decoration: none;
+}
+
 header {
   margin: 5rem;
   text-align: center;
@@ -43,4 +50,35 @@ main {
 }
 .annotations p{
   line-height: normal;
+}
+.demo-prop {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#demo-prop__2 img {
+  padding: 20rem;
+}
+#demo-prop__1 img {
+  padding: 10rem;
+  width: 400px;
+  height: 300px;
+}
+
+.demo-nline {
+  width: 100%;
+  display: flex;
+  justify-items: center;
+  align-items: center;
+  flex-direction: row;
+}
+#demo-nline__nline {
+  width: 20rem;
+  height: 12rem;
+  overflow: auto;  
+}
+.demo-nline__graph {
+  width: 20rem;
+  height: 20rem;
+  overflow: auto;
 }

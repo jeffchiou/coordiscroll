@@ -14,7 +14,8 @@ View some demos here: [jeffchiou.github.io/coordiscroll/](https://jeffchiou.gith
 Who is this for?
 
 - You need relative scrolling, i.e. synchronized by the difference in position rather than absolute position
-- You need complex sync relationships between scrolled elements
+- You need complex sync relationships between scrolled elements.
+- You need the ability to de-sync and re-sync elements at different positions.
 
 If you only need basic synchronized scrolling, other libraries may be more performant.
 
@@ -29,7 +30,7 @@ import { Coord } from "coordiscroll.js"
 let [accs, chs] = Coord.fullyConnect(".my_element_class")
 ```
 
-Included scroll functions are defined in `scrollfuncs.js`.  Here is a sampling:
+Included scroll functions are defined in `scrollfuncs.js`.  Here are a few:
 
 `proportional` (default): elements are synced by the proportion/percentage scrolled
 
@@ -48,8 +49,8 @@ let [accs, chs] = Coord.fullyConnect(".grid_els", "relLoop")
 ## Features
 
 - Define any sync relationship using your own transformation function. Ex:
-  - Absolute position-based scroll sync
-  - Proportional/percentage-based scroll sync
+  - Absolute position-based scroll sync.
+  - Proportional/percentage-based scroll sync.
   - Coordinate vertical w/ vertical, horizontal w/ horizontal, vertical w/ horizontal scrolls.
   - Scroll at different rates.
   - Relative scrolling, using difference from one time to another.
@@ -64,33 +65,33 @@ let [accs, chs] = Coord.fullyConnect(".grid_els", "relLoop")
 ## TODO
 
 - Improve and simplify API
-  - De-sync and re-sync elements at different positions.
+  - De-sync and re-sync elements at different positions
 - Tests
   - React and other framework integration
   - Performance with multiple elements
   - Multiple element add remove
 - Demos
-  - Rewrite demos into a github page
   - Polish demos
 - Minification
 
 ## Advanced Usage
 
-Several scroll functions are defined already, but if you need to roll your own, the functions take in as arguments the latest message, the account receiving the message, and the channel publishing the message.
+Several scroll functions are defined already, but if you need to roll your own, the functions take in as arguments the latest message and the account receiving the message. See `account.js` for what state variables are passed - includes x, y, w, h, and more.
 
 Coord.fullyConnect returns 1 channel per element using the elements as keys, but it doesn't have to be that way. You can have several channels per element, or one channel for several elements. 
 
 ### Custom Sync Function
 
-Synchronized with a sine wave
+Synchronized with a sine wave, from the [demo page](https://jeffchiou.github.io/coordiscroll/).
 
 ```javascript
-let [sinxAcc, sinxCh] = Coord.setupElement('#controller')
-let [sinxControlAcc, sinxControlCh] = Coord.setupElement('#to_be_controlled')
-sinxAcc.setSubAndFunc(sinxControlCh, (msg,acc) => {
-    let y = 20*Math.sin(0.04*msg.x) + acc.state.h/2
-    let x = acc.state.w * msg.x / msg.w
-    return [x,y]
+let nline = document.querySelector("#demo-nline__nline")
+let [sinAcc, sinCh] = Coord.setupElement('#sinLine')
+sinAcc.setSubAndFunc(nlineCh, (msg, acc) => {
+    // with the scaling on the page, one unit is 40px
+	let x = acc.state.w * msg.x / msg.w
+    let y = 80 * Math.sin(x / 40) + 350
+    return [x, y]
 })
 ```
 
@@ -100,14 +101,14 @@ sinxAcc.setSubAndFunc(sinxControlCh, (msg,acc) => {
 
 I wanted to improve the viewing of long articles on the web. Originally, I wanted to make something for cloning and viewing a single long article in two vertical panes. The view on the right would be a little less than one page (one viewport height) down, and scrolling either one would scroll both the same amount.
 
-I looked at scroll animation and scroll synchronization projects, and realized there weren't many implementations of synchronized scrolling that provided the control I wanted. For my desktop multicolumn reading project, I wanted to keep the exact distance scrolled synchronized, allow de-sync and re-sync, and provide options for overscroll (ex. add whitespace, tile the element, or allow one element to continue scrolling while NOT resetting the synchronized scroll position)
+I looked at scroll animation and scroll synchronization projects, and realized there weren't many implementations of synchronized scrolling that provided the control I wanted. For my desktop multicolumn reading project, I wanted to keep the exact distance scrolled synchronized, allow de-sync and re-sync, and provide options for overscroll (ex. add whitespace, tile the element, or allow one element to continue scrolling while NOT resetting the synchronized scroll position).
 
 ## Possible Applications
 
 - More comfortably reading a single article in two columns.
 - A wider view with a zoomed in view:
-  - panning a map, 1 normal sized 1 zoomed in, i.e. a microscope
-- Interactive function to function mapping (math education)
+  - panning a map, 1 normal sized 1 zoomed in, i.e. a microscope.
+- Interactive function to function mapping (math education).
 
 ## Acknowledgements
 
