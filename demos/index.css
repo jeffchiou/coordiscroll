@@ -36,7 +36,7 @@ main {
   width: 36rem;
   height: 24rem;
 }
-.demo-box {
+.demo-box, .demo-nline {
   display: flex;
   justify-content: center;
   margin-top: 4rem;
