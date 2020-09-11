@@ -1,6 +1,7 @@
 *.png
 *.jpg
 /demos/
+node_modules/
 index.html
 temp/*
 temp/.*

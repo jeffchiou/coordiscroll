@@ -23,5 +23,18 @@
     "vanilla",
     "vanillajs"
   ],
-  "author": "Jeffrey Chiou <jeffchiou@gmail.com> (https://www.jeffchiou.com/)"
+  "author": "Jeffrey Chiou <jeffchiou@gmail.com> (https://www.jeffchiou.com/)",
+  "devDependencies": {
+    "@babel/cli": "^7.11.6",
+    "@babel/core": "^7.11.6",
+    "@babel/preset-env": "^7.11.5",
+    "babel-jest": "^26.3.0",
+    "jest": "^26.4.2"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "dependencies": {
+    "@babel/polyfill": "^7.11.5"
+  }
 }
