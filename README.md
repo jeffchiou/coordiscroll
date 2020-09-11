@@ -73,6 +73,7 @@ let [accs, chs] = Coord.fullyConnect(".grid_els", "relLoop")
 - Demos
   - Polish demos
 - Minification
+- Performance tweaks
 
 ## Advanced Usage
 
