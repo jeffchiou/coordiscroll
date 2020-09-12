@@ -20,10 +20,9 @@ export default class Account {
       w: (el=>el.scrollWidth-el.clientWidth)(el),
       h: (el=>el.scrollHeight-el.clientHeight)(el),
     }
+    this.publish = this.publish.bind(this)
   }
-
-  // "Purer" functions
-  updateState = (state, el) => {
+  updateState(state, el) {
     let newState = {
       x: el.scrollLeft,
       y: el.scrollTop,
@@ -38,11 +37,7 @@ export default class Account {
     } 
     return newState
   }
-
-  // Impure
-
-
-  getMessaged = (ch, msg) => {
+  getMessaged(ch, msg) {
     window.requestAnimationFrame(() => {
       this.stopPublishing()
       let [x,y] = this.scrollFunctions.get(ch)(msg, this)
@@ -56,40 +51,35 @@ export default class Account {
       })
     })  
   }
-  getFirstMessage = (ch, msg) => {
+  getFirstMessage(ch, msg) {
     this.prevMsg.msg = msg
     this.prevMsg.ch = ch
   }
-  publish = () => {
+  publish() {
     window.requestAnimationFrame(() => {
       let msg = { ...this.state }
       this.pubChannels.forEach( ch => ch.broadcast(msg) ) 
       window.requestAnimationFrame( () => this.state = this.updateState(this.state, this.el))
     })   
   }
-  setPubChannel = (channel) => {
+  setPubChannel(channel) {
     this.pubChannels.add(channel)
     channel.addPub(this)
   }
-  setSubChannel = (channel) => {
+  setSubChannel(channel) {
     this.subChannels.add(channel)
     channel.addSub(this)
   }
-  setPubChannels = chs => chs.map(this.setPubChannel)
-  setSubChannels = chs => chs.map(this.setSubChannel)
-  setScrollFunction = (ch, func) => this.scrollFunctions.set(ch, func)
-  
-  setSubAndFunc = (ch,func) => {
+  setPubChannels(chs) { chs.map(this.setPubChannel) }
+  setSubChannels(chs) { chs.map(this.setSubChannel) }
+  setScrollFunction(ch, func) { this.scrollFunctions.set(ch, func) }  
+  setSubAndFunc(ch,func) {
     this.setSubChannel(ch)
     this.setScrollFunction(ch,func)
   }
-
-  startPublishing = () => {
-    this.el.addEventListener('scroll', this.publish, {passive: true})
-  }
-  stopPublishing = () => this.el.removeEventListener('scroll', this.publish, {passive: true})
-
-  initialPublish = () => {
+  startPublishing() { this.el.addEventListener('scroll', this.publish, {passive: true}) }
+  stopPublishing() { this.el.removeEventListener('scroll', this.publish, {passive: true}) }
+  initialPublish() {
     this.state = this.updateState(this.state, this.el)
     this.pubChannels.forEach( ch => ch.initialBroadcast({...this.state}) ) 
   }
