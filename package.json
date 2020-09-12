@@ -7,7 +7,6 @@
     "type": "git",
     "url": "https://github.com/jeffchiou/coordiscroll"
   },
-  "main": "src/coordiscroll.js",
   "keywords": [
     "coordinate",
     "publish",
@@ -27,9 +26,13 @@
   "devDependencies": {
     "@babel/cli": "^7.11.6",
     "@babel/core": "^7.11.6",
+    "@babel/plugin-proposal-class-properties": "^7.10.4",
+    "@babel/plugin-transform-arrow-functions": "^7.10.4",
     "@babel/preset-env": "^7.11.5",
     "babel-jest": "^26.3.0",
-    "jest": "^26.4.2"
+    "jest": "^26.4.2",
+    "webpack": "^4.44.1",
+    "webpack-cli": "^3.3.12"
   },
   "scripts": {
     "test": "jest"

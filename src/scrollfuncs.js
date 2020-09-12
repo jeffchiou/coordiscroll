@@ -46,5 +46,4 @@ ScrollFuncs.relSoft = (msg, acc) => {
   acc.state.yGoal = acc.state.yGoal ? dy + acc.state.yGoal : dy + acc.el.scrollTop
   return [acc.state.xGoal, acc.state.yGoal]
 }
-
 export default ScrollFuncs
