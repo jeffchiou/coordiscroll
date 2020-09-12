@@ -1,4 +1,4 @@
-const ScrollFuncs = {}
+export const ScrollFuncs = {}
 ScrollFuncs.absolute = (msg, acc) => [msg.x, msg.y]
 ScrollFuncs.absXOnly = (msg, acc) => [msg.x, null]
 ScrollFuncs.absYOnly = (msg, acc) => [null, msg.y]
@@ -46,4 +46,3 @@ ScrollFuncs.relSoft = (msg, acc) => {
   acc.state.yGoal = acc.state.yGoal ? dy + acc.state.yGoal : dy + acc.el.scrollTop
   return [acc.state.xGoal, acc.state.yGoal]
 }
-export default ScrollFuncs

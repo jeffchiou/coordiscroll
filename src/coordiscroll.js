@@ -1,4 +1,4 @@
-import ScrollFuncs from './scrollfuncs.js'
+import { ScrollFuncs } from './scrollfuncs.js'
 import Account from './account.js'
 import Channel from './channel.js'
 //TODO: subAllToChannel(els), syncTwoEls(el1,el2), use msgBuffers instead of msgs
