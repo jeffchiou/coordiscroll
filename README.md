@@ -5,7 +5,7 @@
 [![GitHub stars](https://img.shields.io/github/stars/jeffchiou/coordiscroll)](https://github.com/jeffchiou/coordiscroll/stargazers)
 [![GitHub issues](https://img.shields.io/github/issues/jeffchiou/coordiscroll)](https://github.com/jeffchiou/coordiscroll/issues)
 
-Currently WIP alpha status: in development and semi-functional. Adaptable synchronized scrolling of DOM elements using the Publish-Subscribe pattern. Vanilla JS.
+Adaptable synchronized scrolling of DOM elements using the Publish-Subscribe pattern. Vanilla JS. In alpha.
 
 ## Overview
 
@@ -68,12 +68,8 @@ let [accs, chs] = Coord.fullyConnect(".grid_els", "relLoop")
   - De-sync and re-sync elements at different positions
 - Tests
   - React and other framework integration
-  - Performance with multiple elements
   - Multiple element add remove
-- Demos
-  - Polish demos
 - Minification
-- Performance tweaks
 
 ## Advanced Usage
 
