@@ -8,12 +8,30 @@
   <style>
     :root {
       font-size: 62.5%;
+      scroll-behavior: smooth;
     }
     body {
       font-size: 1.6rem;
       line-height: 2rem;
-      font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"; 
+      color: #333;
+      background-color: #fffefb;
     }
+    a {
+      font-weight: bold;
+      color: hsla(207, 44%, 49%, 1);
+      text-decoration: none;
+    }
+    a:visited {
+      color: hsla(207, 44%, 40%, 1);
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    p {
+      line-height: 2rem;
+    }
+    
     .main-ui {
       display: flex;
       justify-content: center;      
@@ -23,20 +41,15 @@
       justify-content: center;
     }
     .column__article {
-      min-width: 25rem;
-      max-width: 40rem;
+      min-width: 20rem;
+      max-width: 40rem;     
       height: 98vh;
       overflow: scroll;
+      flex-grow: 1;
     }
     .column__controls {
       display: flex;
       flex-direction: column;
-    }
-    #colnum2 article{
-      height: 90vh;
-    }
-    #colnum3 article{
-      height: 95vh;
     }
 
 
@@ -49,7 +62,7 @@
     els[2].scrollTop = els[1].clientHeight + els[0].clientHeight
     console.log(els[1].scrollTop)
     window.onload = () =>{
-      let [accs, chs] = Coord.fullyConnect(els,"relSoft")
+      let [accs, chs] = Coord.fullyConnect(els,"relSpring")
     }
 
     

@@ -26,8 +26,8 @@ ScrollFuncs.relLoop =  (msg, acc) => {
 ScrollFuncs.relLoopDxy =  (msg, acc) => {
   let dx = msg.x - msg.x0
   let dy = (msg.y - msg.y0)
-  acc.state.xGoal = acc.state.xGoal ? dx + acc.state.xGoal : dx + acc.el.scrollLeft
-  acc.state.yGoal = acc.state.yGoal ? dy + acc.state.yGoal : dy + acc.el.scrollTop
+  acc.state.xGoal = acc.state.xGoal ? dx + acc.state.xGoal : dx + acc.state.x
+  acc.state.yGoal = acc.state.yGoal ? dy + acc.state.yGoal : dy + acc.state.y
   if (acc.state.xGoal > acc.state.w)  acc.state.xGoal = acc.state.xGoal - acc.state.w + dx
   else if (acc.state.xGoal < 0)       acc.state.xGoal = acc.state.xGoal + acc.state.w + dx  
   if (acc.state.yGoal > acc.state.h)  acc.state.yGoal = acc.state.yGoal - acc.state.h + dy
@@ -42,7 +42,7 @@ ScrollFuncs.relSoft = (msg, acc) => {
   if (acc.state.yGoal > acc.state.h || acc.state.yGoal < 0) acc.state.yGoal = null    
   // alternative implementation is to alternate between NaN (NaN, not null) and next goal, 
   // resulting in intended loss of sync position
-  acc.state.xGoal = acc.state.xGoal ? dx + acc.state.xGoal : dx + acc.el.scrollLeft
-  acc.state.yGoal = acc.state.yGoal ? dy + acc.state.yGoal : dy + acc.el.scrollTop
+  acc.state.xGoal = acc.state.xGoal ? dx + acc.state.xGoal : dx + acc.state.x
+  acc.state.yGoal = acc.state.yGoal ? dy + acc.state.yGoal : dy + acc.state.y
   return [acc.state.xGoal, acc.state.yGoal]
 }

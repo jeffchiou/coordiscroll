@@ -1,4 +1,4 @@
-export default class Account {
+export class Account {
   constructor(el, xOnSync=0, yOnSync=0) {
     this.el = el
     this.pubChannels = new Set()
@@ -90,6 +90,103 @@ export default class Account {
   stopPublishing() { this.el.removeEventListener('scroll', this.publish, {passive: true}) }
   initialPublish() {
     this.state = this.updateState(this.state, this.el)
+    this.pubChannels.forEach( ch => ch.initialBroadcast({...this.state}) ) 
+  }
+}
+
+export class WinAccount {
+  constructor(win, xOnSync=0, yOnSync=0) {
+    this.win = win
+    this.pubChannels = new Set()
+    this.subChannels = new Set()
+    this.scrollFunctions = new Map()
+    this.prevMsg = {}
+    // Dynamic constructor elements need to be set with functions. In this case IIFEs
+    let foundX = (win=>win.scrollX)(win)
+    let foundY = (win=>win.scrollY)(win)
+    this.state = {
+      x: foundX,
+      y: foundY,
+      x0: foundX,
+      y0: foundY,
+      xOnSync: foundX,
+      yOnSync: foundY,
+      xGoal: null,
+      yGoal: null,
+      w: (win=>win.document.documentElement.scrollWidth - win.innerWidth)(win),
+      h: (win=>win.document.documentElement.scrollHeight - win.innerHeight)(win),
+    }
+    this.publish = this.publish.bind(this)
+  }
+  updateState(state, win) {
+    let newState = {
+      x: win.scrollX,
+      y: win.scrollY,
+      x0: state.x,
+      y0: state.y,
+      xOnSync: state.xOnSync,
+      yOnSync: state.yOnSync,
+      xGoal: state.xGoal ? ( state.xGoal == win.scrollX ? null : state.xGoal ) : null,
+      yGoal: state.yGoal ? ( state.yGoal == win.scrollY ? null : state.yGoal ) : null,
+      w: win.document.documentElement.scrollWidth - win.innerWidth,
+      h: win.document.documentElement.scrollHeight - win.innerHeight,
+    } 
+    
+    return newState
+  }
+  getMessaged(ch, msg) {
+    window.requestAnimationFrame(() => {
+      this.stopPublishing()
+      let [x,y] = this.scrollFunctions.get(ch)(msg, this)
+      this.win.scrollTo(x,y) 
+      this.prevMsg.msg = msg
+      this.prevMsg.ch = ch 
+      window.requestAnimationFrame( () => {
+        this.state = this.updateState(this.state, this.win)
+        this.startPublishing()
+      })
+    })  
+  }
+
+  getFirstMessage(ch, msg) {
+    this.prevMsg.msg = msg
+    this.prevMsg.ch = ch
+  }
+  publish() {
+    window.requestAnimationFrame(() => {
+      let msg = { ...this.state }
+      this.pubChannels.forEach( ch => ch.broadcast(msg) ) 
+      window.requestAnimationFrame( () => this.state = this.updateState(this.state, this.win))
+    })   
+  }
+  setPubChannel(channel) {
+    this.pubChannels.add(channel)
+    channel.addPub(this)
+  }
+  setSubChannel(channel) {
+    this.subChannels.add(channel)
+    channel.addSub(this)
+  }
+  setPubChannels(chs) { chs.map(this.setPubChannel) }
+  setSubChannels(chs) { chs.map(this.setSubChannel) }
+  setScrollFunction(ch, func) { this.scrollFunctions.set(ch, func) }  
+  setSubAndFunc(ch,func) {
+    this.setSubChannel(ch)
+    this.setScrollFunction(ch,func)
+  }
+  unsetSubChannel(channel) {
+    channel.removeSub(this)
+    this.subChannels.delete(channel)
+  }
+  unsetPubChannel(channel) {
+    channel.removePub(this)
+    this.pubChannels.delete(channel)
+  }
+  isSubbedTo(channel) { return this.subChannels.has(channel) }
+  startPublishing() { this.win.addEventListener('scroll', this.publish, {passive: true})}
+  stopPublishing() { this.win.removeEventListener('scroll', this.publish, {passive: true}) }
+  initialPublish() {
+    this.state = this.updateState(this.state, this.win)
     this.pubChannels.forEach( ch => ch.initialBroadcast({...this.state}) ) 
   }
 }

@@ -48,7 +48,7 @@ function updateSyncHTML(columnIndex) {
     controls[columnIndex].getElementsByClassName("column__sync")[0].innerHTML = "⚙ Desync";
   } else {
     columnClasses.replace("column--synced", "column--desynced");
-    controls[columnIndex].getElementsByClassName("column__sync")[0].innerHTML = "Sync (Not synced)";
+    controls[columnIndex].getElementsByClassName("column__sync")[0].innerHTML = "⚙ Resync";
   }
 }
 

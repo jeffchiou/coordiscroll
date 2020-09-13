@@ -1,5 +1,5 @@
 import { ScrollFuncs } from './scrollfuncs.js'
-import Account from './account.js'
+import { Account, WinAccount } from './account.js'
 import Channel from './channel.js'
 //TODO: subAllToChannel(els), syncTwoEls(el1,el2), use msgBuffers instead of msgs
 
@@ -79,9 +79,33 @@ Coord.fullyReconnect = function(accs, chs, scrollFunc="proportional") {
     })
   })
 }
+Coord.winFullyConnect = (elsOrQuery, scrollFunc="relSpring") => {
+  if (typeof scrollFunc == 'string') scrollFunc = ScrollFuncs[scrollFunc]
+  let els = valivertMultiple(elsOrQuery)
+  let accs = []
+  let chs = []
+  els.forEach((el,i) => {
+    accs.push(new WinAccount(el))
+    chs.push(new Channel())
+    accs[i].setPubChannel(chs[i])
+  })
+  els.forEach((mainEl,i) => {
+    els.forEach((elToSubTo,j) => {
+      if (!(i==j)) {
+        accs[i].setSubChannel(chs[j])
+        accs[i].setScrollFunction(chs[j], scrollFunc)
+      }
+    })
+  })
+  console.log('publishing')
+  accs.forEach(acc => acc.initialPublish())
+  accs.forEach(acc => acc.startPublishing())
+  return [accs, chs]
+}
 
 export {
-  Account,  
+  Account,
+  WinAccount,
   Channel,
   Coord,
   ScrollFuncs

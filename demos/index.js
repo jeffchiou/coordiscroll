@@ -77,6 +77,9 @@ bloch2 = new Draggable(document.querySelector("#demo-prop__2"))
 bloch1.start()
 bloch2.start()
 
+nlineDrag = new Draggable(document.querySelector("#demo-nline__nline"))
+nlineDrag.start()
+
 
 let margin = { top: 50, right: 50, bottom: 50, left: 50 },
   width = 883 - margin.left - margin.right,

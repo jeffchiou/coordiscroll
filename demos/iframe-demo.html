@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>CoordiScroll Reading</title>
+  <meta name="description" content="Synchronized scrolling reading demo for CoordiScroll">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    :root {
+      font-size: 62.5%;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-size: 1.6rem;
+      line-height: 2rem;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+      color: #333;
+      background-color: #fffefb;
+    }
+
+    a {
+      font-weight: bold;
+      color: hsla(207, 44%, 49%, 1);
+      text-decoration: none;
+    }
+
+    a:visited {
+      color: hsla(207, 44%, 40%, 1);
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    p {
+      line-height: 2rem;
+    }
+
+    .cols {
+      display: flex; 
+    }
+    .col {
+      flex-grow: 1;
+      width: 28vw;
+      margin: 0 1rem;
+      height: 98vh;
+    }
+    iframe {
+      width: 100%;
+      height: 80%;
+    }
+    .controls {
+      display: flex;
+      align-items: center;
+      justify-items: center;
+    }
+    .controls h2 {
+      margin: 1rem 2rem;      
+      height: 2rem;
+    }
+    .controls button {
+      flex-grow: 1;
+      height: 4rem;
+    }
+  </style>
+  <script type="module">
+    import { Account, Channel, Coord, ScrollFuncs } from "../src/coordiscroll.js"
+    let doc1 = document.querySelector("#doc1")
+    let doc2 = document.querySelector("#doc2")
+    let doc3 = document.querySelector("#doc3")
+    async function load1() {
+      return new Promise((resolve, reject) => {
+        doc1.onload = function() {
+          resolve(1)
+        }
+      })
+    }
+    async function load2() {
+      return new Promise((resolve, reject) => {
+        doc2.onload = function() {
+          resolve(2)
+        }
+      })
+    }
+    async function load3() {
+      return new Promise((resolve, reject) => {
+        doc3.onload = function() {
+          resolve(3)
+        }
+      })
+    }
+    async function loader() {
+      let loaded1 = await load1()
+      let loaded2 = await load2()
+      console.log(loaded1, loaded2)
+      let [accs, chs] = Coord.winFullyConnect([doc1.contentWindow, doc2.contentWindow], "relSpring")
+    }
+    loader()
+     
+//      let [accs, chs] = Coord.winFullyConnect([doc1, doc2, doc3], "relSpring")
+  </script>
+</head>
+
+<body>
+
+  <section class="cols">
+
+    <div id="group1" class="col">
+      <div class="controls">
+        <h2>1</h2>
+        <button class="column__sync" type="button">⚙ Desync</button>
+        <button class="column__jump" type="button">↷ 1pg Down</button>
+        <button class="column__jump" type="button">↶ 1pg Up</button>
+      </div>
+      <iframe src="./zoological/zoological.html" id="doc1"></iframe>
+    </div>
+
+    <div id="group2" class="col">
+      <div class="controls">
+        <h2>2</h2>
+        <button class="column__sync" type="button">⚙ Desync</button>
+        <button class="column__jump" type="button">↷ 1pg Down</button>
+        <button class="column__jump" type="button">🚩 to 1</button>
+        <button class="column__jump" type="button">↶ 1pg Up</button>
+      </div>
+      <iframe src="./zoological/zoological.html" id="doc2"></iframe>
+    </div>
+
+    <div id="group3" class="col">
+      <div class="controls">
+        <h2>3</h2>
+        <button class="column__sync" type="button">⚙ Desync</button>
+        <button class="jump-down" type="button">↷ 1pg Down</button>
+        <button class="column__jump" type="button">🚩 to 1</button>
+        <button class="jump-up" type="button">↶ 1pg Up</button>
+      </div>
+      <iframe src="./zoological/zoological.html" id="doc3"></iframe>
+    </div>    
+  </section>
+</body>
+
+</html>
