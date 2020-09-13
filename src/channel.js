@@ -13,14 +13,6 @@ export default class Channel {
   addPubs(pubs) { pubs.map(this.addPub) }
   removePub(pub) { this.pubs.delete(pub.el) }
   removePubs(pubs) { pubs.map(this.removePub) }
-  linkSub(sub) {
-    this.addSub(sub)
-    sub.addChannel(this)
-  }
-  unlinkSub(sub) {
-    this.removeSub(sub)
-    sub.removeChannel(this)
-  }
   broadcast(msg) { this.subs.forEach(sub => sub.getMessaged(this, msg)) }
   initialBroadcast(msg) { this.subs.forEach(sub => sub.getFirstMessage(this, msg)) }
 }

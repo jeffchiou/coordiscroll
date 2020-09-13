@@ -29,6 +29,55 @@ appendClone(softDiv,lorem,"demo-soft__1","demo-soft__col")
 appendClone(softDiv,lorem,"demo-soft__2","demo-soft__col")
 appendClone(softDiv,annotations,"demo-soft__3","demo-soft__col")
 
+// Drag scroll implementation adapted from htmldom.dev
+class Draggable {
+  constructor(el) {
+    this.el = el
+    this.pos = { top: 0, left: 0, x: 0, y: 0 }
+    this.mouseDownHandler = this.mouseDownHandler.bind(this)
+    this.mouseMoveHandler = this.mouseMoveHandler.bind(this)
+    this.mouseUpHandler = this.mouseUpHandler.bind(this)
+    el.style.cursor = 'grab'
+  }
+  mouseDownHandler(e) {
+    e.preventDefault() // prevent image ghost drag
+    this.pos = {
+        left: this.el.scrollLeft,
+        top: this.el.scrollTop,
+        x: e.clientX,
+        y: e.clientY,
+    }
+    this.el.style.cursor = 'grabbing'
+    this.el.style.userSelect = 'none'    
+    this.el.addEventListener('mousemove', this.mouseMoveHandler)
+    this.el.addEventListener('mouseup', this.mouseUpHandler)
+  }
+  mouseMoveHandler(e) {
+    // How far the mouse has been moved
+    let dx = e.clientX - this.pos.x
+    let dy = e.clientY - this.pos.y
+
+    // Scroll the element
+    this.el.scrollTop = this.pos.top - dy
+    this.el.scrollLeft = this.pos.left - dx
+  }
+  mouseUpHandler = function() {
+    this.el.style.cursor = 'grab'
+    this.el.style.removeProperty('user-select')
+
+    this.el.removeEventListener('mousemove', this.mouseMoveHandler)
+    this.el.removeEventListener('mouseup', this.mouseUpHandler)
+  }
+  start() {
+    this.el.addEventListener('mousedown', this.mouseDownHandler);
+  }
+}
+bloch1 = new Draggable(document.querySelector("#demo-prop__1"))
+bloch2 = new Draggable(document.querySelector("#demo-prop__2"))
+bloch1.start()
+bloch2.start()
+
+
 let margin = { top: 50, right: 50, bottom: 50, left: 50 },
   width = 883 - margin.left - margin.right,
   height = 879 - margin.top - margin.bottom;

@@ -39,24 +39,22 @@ Coord.setupElement = (elOrQuery) => {
   acc.startPublishing()
   return [acc, ch]
 }
-
 Coord.fullyConnect = (elsOrQuery, scrollFunc="proportional") => {
+  if (typeof scrollFunc == 'string') scrollFunc = ScrollFuncs[scrollFunc]
   let els = valivertMultiple(elsOrQuery)
-  let accs = new Map()
-  let chs = new Map() 
-  els.forEach(el => {
-    accs.set(el, new Account(el))
-    chs.set(el, new Channel())
-    accs.get(el).setPubChannel(chs.get(el))
+  let accs = []
+  let chs = []
+  els.forEach((el,i) => {
+    accs.push(new Account(el))
+    chs.push(new Channel())
+    accs[i].setPubChannel(chs[i])
   })
 
-  els.forEach(mainEl => {
-    els.forEach(elToSubTo => {
+  els.forEach((mainEl,i) => {
+    els.forEach((elToSubTo,j) => {
       if (!mainEl.isSameNode(elToSubTo)) {
-        accs.get(mainEl).setSubChannel(chs.get(elToSubTo))
-        accs.get(mainEl).setScrollFunction(
-          chs.get(elToSubTo), ScrollFuncs[scrollFunc]
-        )
+        accs[i].setSubChannel(chs[j])
+        accs[i].setScrollFunction(chs[j], scrollFunc)
       }
     })
   })
@@ -65,7 +63,22 @@ Coord.fullyConnect = (elsOrQuery, scrollFunc="proportional") => {
   accs.forEach(acc => acc.startPublishing())
   return [accs, chs]
 }
-
+Coord.fullyUnsubscribe = function(accs, chs) {
+  accs.forEach(acc => {
+    chs.forEach(ch => { if (acc.isSubbedTo(ch)) acc.unsetSubChannel(ch) })
+  })  
+}
+Coord.fullyReconnect = function(accs, chs, scrollFunc="proportional") {
+  if (typeof scrollFunc == 'string') scrollFunc = ScrollFuncs[scrollFunc]
+  accs.forEach((acc,i) => {
+    chs.forEach((ch,j) => {
+      if (!acc.isSubbedTo(ch)) {
+        acc.setSubChannel(ch)
+        acc.setScrollFunction(ch, scrollFunc)
+      }
+    })
+  })
+}
 
 export {
   Account,  

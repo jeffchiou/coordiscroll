@@ -77,6 +77,15 @@ export default class Account {
     this.setSubChannel(ch)
     this.setScrollFunction(ch,func)
   }
+  unsetSubChannel(channel) {
+    channel.removeSub(this)
+    this.subChannels.delete(channel)
+  }
+  unsetPubChannel(channel) {
+    channel.removePub(this)
+    this.pubChannels.delete(channel)
+  }
+  isSubbedTo(channel) { return this.subChannels.has(channel) }
   startPublishing() { this.el.addEventListener('scroll', this.publish, {passive: true}) }
   stopPublishing() { this.el.removeEventListener('scroll', this.publish, {passive: true}) }
   initialPublish() {
