@@ -28,7 +28,7 @@ a:hover {
 header {
   margin: 5rem;
   text-align: center;
-  width: 25%;
+  width: 30rem;
   min-width: 25rem;
 }
 p {
@@ -36,11 +36,16 @@ p {
 }
 main {
   overflow: auto;
-  min-width: 40rem;
+  min-width: 35rem;
   max-width: 100rem;
-  width: 60%;
+  width: 80%;
   flex-shrink: 0;
   margin: 5rem;
+}
+footer {
+  width: 30rem;
+  min-width: 25rem;
+  height: 10rem;
 }
 .hidden {
   display: none;
