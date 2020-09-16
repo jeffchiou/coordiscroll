@@ -66,7 +66,7 @@
     }
   </style>
   <script type="module">
-    import { Account, Channel, Coord, ScrollFuncs } from "../src/coordiscroll.js"
+    import { Account, WinAccount, Channel, Coord, ScrollFuncs } from "../src/coordiscroll.js"
     let doc1 = document.querySelector("#doc1")
     let doc2 = document.querySelector("#doc2")
     let doc3 = document.querySelector("#doc3")
@@ -95,11 +95,19 @@
       let loaded1 = await load1()
       let loaded2 = await load2()
       console.log(loaded1, loaded2)
-      let [accs, chs] = Coord.winFullyConnect([doc1.contentWindow, doc2.contentWindow], "relSpring")
+      //window.onload = function() {
+      //  
+      //}
+
     }
-    loader()
-     
-//      let [accs, chs] = Coord.winFullyConnect([doc1, doc2, doc3], "relSpring")
+    //loader()
+
+    document.body.onload = function() {
+      doc3.contentWindow.scrollTo(0, 1600)
+      doc2.contentWindow.scrollTo(0, 800)
+
+      let [accs, chs] = Coord.winFullyConnect([doc1.contentWindow, doc2.contentWindow, doc3.contentWindow], "relSpring")      
+    }
   </script>
 </head>
 

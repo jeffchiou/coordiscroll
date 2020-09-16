@@ -91,7 +91,7 @@ Coord.winFullyConnect = (elsOrQuery, scrollFunc="relSpring") => {
   })
   els.forEach((mainEl,i) => {
     els.forEach((elToSubTo,j) => {
-      if (!(i==j)) {
+      if (i!=j) {
         accs[i].setSubChannel(chs[j])
         accs[i].setScrollFunction(chs[j], scrollFunc)
       }

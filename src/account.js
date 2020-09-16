@@ -95,15 +95,15 @@ export class Account {
 }
 
 export class WinAccount {
-  constructor(win, xOnSync=0, yOnSync=0) {
-    this.win = win
+  constructor(el, xOnSync=0, yOnSync=0) {
+    this.el = el
     this.pubChannels = new Set()
     this.subChannels = new Set()
     this.scrollFunctions = new Map()
     this.prevMsg = {}
     // Dynamic constructor elements need to be set with functions. In this case IIFEs
-    let foundX = (win=>win.scrollX)(win)
-    let foundY = (win=>win.scrollY)(win)
+    let foundX = (el=>el.scrollX)(el)
+    let foundY = (el=>el.scrollY)(el)
     this.state = {
       x: foundX,
       y: foundY,
@@ -113,23 +113,23 @@ export class WinAccount {
       yOnSync: foundY,
       xGoal: null,
       yGoal: null,
-      w: (win=>win.document.documentElement.scrollWidth - win.innerWidth)(win),
-      h: (win=>win.document.documentElement.scrollHeight - win.innerHeight)(win),
+      w: (el=>el.document.documentElement.scrollWidth - el.innerWidth)(el),
+      h: (el=>el.document.documentElement.scrollHeight - el.innerHeight)(el),
     }
     this.publish = this.publish.bind(this)
   }
-  updateState(state, win) {
+  updateState(state, el) {
     let newState = {
-      x: win.scrollX,
-      y: win.scrollY,
+      x: el.scrollX,
+      y: el.scrollY,
       x0: state.x,
       y0: state.y,
       xOnSync: state.xOnSync,
       yOnSync: state.yOnSync,
-      xGoal: state.xGoal ? ( state.xGoal == win.scrollX ? null : state.xGoal ) : null,
-      yGoal: state.yGoal ? ( state.yGoal == win.scrollY ? null : state.yGoal ) : null,
-      w: win.document.documentElement.scrollWidth - win.innerWidth,
-      h: win.document.documentElement.scrollHeight - win.innerHeight,
+      xGoal: state.xGoal ? ( state.xGoal == el.scrollX ? null : state.xGoal ) : null,
+      yGoal: state.yGoal ? ( state.yGoal == el.scrollY ? null : state.yGoal ) : null,
+      w: el.document.documentElement.scrollWidth - el.innerWidth,
+      h: el.document.documentElement.scrollHeight - el.innerHeight,
     } 
     
     return newState
@@ -138,11 +138,11 @@ export class WinAccount {
     window.requestAnimationFrame(() => {
       this.stopPublishing()
       let [x,y] = this.scrollFunctions.get(ch)(msg, this)
-      this.win.scrollTo(x,y) 
+      this.el.scrollTo(x,y) 
       this.prevMsg.msg = msg
       this.prevMsg.ch = ch 
       window.requestAnimationFrame( () => {
-        this.state = this.updateState(this.state, this.win)
+        this.state = this.updateState(this.state, this.el)
         this.startPublishing()
       })
     })  
@@ -156,7 +156,7 @@ export class WinAccount {
     window.requestAnimationFrame(() => {
       let msg = { ...this.state }
       this.pubChannels.forEach( ch => ch.broadcast(msg) ) 
-      window.requestAnimationFrame( () => this.state = this.updateState(this.state, this.win))
+      window.requestAnimationFrame( () => this.state = this.updateState(this.state, this.el))
     })   
   }
   setPubChannel(channel) {
@@ -183,10 +183,10 @@ export class WinAccount {
     this.pubChannels.delete(channel)
   }
   isSubbedTo(channel) { return this.subChannels.has(channel) }
-  startPublishing() { this.win.addEventListener('scroll', this.publish, {passive: true})}
-  stopPublishing() { this.win.removeEventListener('scroll', this.publish, {passive: true}) }
+  startPublishing() { this.el.addEventListener('scroll', this.publish, {passive: true})}
+  stopPublishing() { this.el.removeEventListener('scroll', this.publish, {passive: true}) }
   initialPublish() {
-    this.state = this.updateState(this.state, this.win)
+    this.state = this.updateState(this.state, this.el)
     this.pubChannels.forEach( ch => ch.initialBroadcast({...this.state}) ) 
   }
 }
