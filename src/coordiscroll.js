@@ -97,7 +97,6 @@ Coord.winFullyConnect = (elsOrQuery, scrollFunc="relSpring") => {
       }
     })
   })
-  console.log('publishing')
   accs.forEach(acc => acc.initialPublish())
   accs.forEach(acc => acc.startPublishing())
   return [accs, chs]

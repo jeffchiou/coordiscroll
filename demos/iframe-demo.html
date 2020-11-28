@@ -70,43 +70,32 @@
     let doc1 = document.querySelector("#doc1")
     let doc2 = document.querySelector("#doc2")
     let doc3 = document.querySelector("#doc3")
-    async function load1() {
-      return new Promise((resolve, reject) => {
-        doc1.onload = function() {
-          resolve(1)
-        }
-      })
-    }
-    async function load2() {
-      return new Promise((resolve, reject) => {
-        doc2.onload = function() {
-          resolve(2)
-        }
-      })
-    }
-    async function load3() {
-      return new Promise((resolve, reject) => {
-        doc3.onload = function() {
-          resolve(3)
-        }
-      })
-    }
-    async function loader() {
-      let loaded1 = await load1()
-      let loaded2 = await load2()
-      console.log(loaded1, loaded2)
-      //window.onload = function() {
-      //  
-      //}
-
-    }
-    //loader()
+    let ctrl1 = document.querySelector('#ctrl1')
+    let ctrl2 = document.querySelector('#ctrl2')
+    let ctrl3 = document.querySelector('#ctrl3')
 
     document.body.onload = function() {
       doc3.contentWindow.scrollTo(0, 1600)
       doc2.contentWindow.scrollTo(0, 800)
 
-      let [accs, chs] = Coord.winFullyConnect([doc1.contentWindow, doc2.contentWindow, doc3.contentWindow], "relSpring")      
+      let [accs, chs] = Coord.winFullyConnect([doc1.contentWindow, doc2.contentWindow, doc3.contentWindow], "relLoopDxy")      
+      let ctrl1Desync = ctrl1.querySelector(".column__sync")
+      ctrl1Desync.onclick = function() {
+        if (ctrl1Desync.innerHTML.includes('Desync')) {
+          accs[0].unsetSubChannel(chs[1])
+          accs[0].unsetSubChannel(chs[2])
+          accs[0].unsetPubChannel(chs[0])          
+          ctrl1Desync.innerHTML = "⚙ Resync"
+        } else {
+          accs[0].updateSyncPos()
+          accs[0].setSubChannel(chs[1])
+          accs[0].setSubChannel(chs[2])
+          accs[0].setPubChannel(chs[0])  
+          ctrl1Desync.innerHTML = "⚙ Desync"
+        }
+        
+
+      }
     }
   </script>
 </head>
@@ -116,7 +105,7 @@
   <section class="cols">
 
     <div id="group1" class="col">
-      <div class="controls">
+      <div class="controls" id="ctrl1">
         <h2>1</h2>
         <button class="column__sync" type="button">⚙ Desync</button>
         <button class="column__jump" type="button">↷ 1pg Down</button>
@@ -126,7 +115,7 @@
     </div>
 
     <div id="group2" class="col">
-      <div class="controls">
+      <div class="controls" id="ctrl2">
         <h2>2</h2>
         <button class="column__sync" type="button">⚙ Desync</button>
         <button class="column__jump" type="button">↷ 1pg Down</button>
@@ -137,7 +126,7 @@
     </div>
 
     <div id="group3" class="col">
-      <div class="controls">
+      <div class="controls" id="ctrl3">
         <h2>3</h2>
         <button class="column__sync" type="button">⚙ Desync</button>
         <button class="jump-down" type="button">↷ 1pg Down</button>

@@ -85,6 +85,8 @@ export class Account {
     channel.removePub(this)
     this.pubChannels.delete(channel)
   }
+  unsetSubChannels(chs) { chs.map(this.unsetSubChannel) }
+  unsetPubChannels(chs) { chs.map(this.unsetPubChannel) }
   isSubbedTo(channel) { return this.subChannels.has(channel) }
   startPublishing() { this.el.addEventListener('scroll', this.publish, {passive: true}) }
   stopPublishing() { this.el.removeEventListener('scroll', this.publish, {passive: true}) }
@@ -134,6 +136,20 @@ export class WinAccount {
     
     return newState
   }
+  updateSyncPos() {
+    this.state = {
+      x: this.el.scrollX,
+      y: this.el.scrollY,
+      x0: this.state.x,
+      y0: this.state.y,
+      xOnSync: this.el.scrollX,
+      yOnSync: this.el.scrollY,
+      xGoal: this.state.xGoal ? ( this.state.xGoal == this.el.scrollX ? null : this.state.xGoal ) : null,
+      yGoal: this.state.yGoal ? ( this.state.yGoal == this.el.scrollY ? null : this.state.yGoal ) : null,
+      w: this.el.document.documentElement.scrollWidth - this.el.innerWidth,
+      h: this.el.document.documentElement.scrollHeight - this.el.innerHeight,
+    } 
+  }
   getMessaged(ch, msg) {
     window.requestAnimationFrame(() => {
       this.stopPublishing()
@@ -182,6 +198,8 @@ export class WinAccount {
     channel.removePub(this)
     this.pubChannels.delete(channel)
   }
+  unsetSubChannels(chs) { chs.map(this.unsetSubChannel) }
+  unsetPubChannels(chs) { chs.map(this.unsetPubChannel) }
   isSubbedTo(channel) { return this.subChannels.has(channel) }
   startPublishing() { this.el.addEventListener('scroll', this.publish, {passive: true})}
   stopPublishing() { this.el.removeEventListener('scroll', this.publish, {passive: true}) }

@@ -3,6 +3,8 @@
   "version": "0.2.4",
   "description": "Adaptable synchronized scrolling of DOM elements using PubSub. Vanilla JS. In alpha.",
   "license": "MIT",
+  "main": "lib/index",
+  "types": "lib/index",
   "repository": {
     "type": "git",
     "url": "https://github.com/jeffchiou/coordiscroll"
@@ -24,18 +26,12 @@
   ],
   "author": "Jeffrey Chiou <jeffchiou@gmail.com> (https://www.jeffchiou.com/)",
   "devDependencies": {
-    "@babel/cli": "^7.11.6",
-    "@babel/core": "^7.11.6",
-    "@babel/plugin-proposal-class-properties": "^7.10.4",
-    "@babel/plugin-transform-arrow-functions": "^7.10.4",
-    "@babel/preset-env": "^7.11.5",
-    "babel-jest": "^26.3.0",
-    "jest": "^26.4.2"
+    "jest": "^26.4.2",
+    "typescript": "^4.1.2"
   },
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "dev": "npx tsc -w"
   },
-  "dependencies": {
-    "@babel/polyfill": "^7.11.5"
-  }
+  "dependencies": {}
 }
